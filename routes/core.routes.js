@@ -10,6 +10,11 @@ var routes =
         controller: 'index',
         view: 'index'
     },
+    'view' : {
+        url : '/view',
+        controller : 'TreeController',
+        view : 'tree'
+    }
 }
 
 module.exports = routes;

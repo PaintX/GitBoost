@@ -5,6 +5,7 @@ var handlebars = require("express-handlebars");
 var session = require('express-session');
 var routes = require('./routes/core.routes');
 var config = require("./config");
+var helpers = require('handlebars-helpers')();
 
 var app = express();
 
@@ -18,7 +19,7 @@ app.set('views', __dirname + '/themes/'+ config.app.theme+'/hbs');
 
 // view engine setup
 app.set('view engine', '.hbs');
-app.engine('.hbs', handlebars({ extname: '.hbs' , partialsDir: './themes/'+ config.app.theme+'/hbs'}));
+app.engine('.hbs', handlebars({ extname: '.hbs' , partialsDir: './themes/'+ config.app.theme+'/hbs' , helpers : helpers}));
 
 
 app.use(function (req, res, next)
@@ -80,6 +81,7 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error.hbs', {
         message: err.message,
+        stack : err.stack,
         error: {}
     });
 });

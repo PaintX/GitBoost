@@ -1,5 +1,6 @@
 var fs = require('fs');
-
+var config = require("../../../config");
+var git = require('./Command');
 
 var repositories = {};
 
@@ -87,5 +88,84 @@ function recurseDirectory ( p , toplevel )
     return repositories;
 }
 
+function getRepositoryFromName(paths , repo)
+{
+    let allRepositories = getRepositories(paths);
+    let rep = undefined;
+
+    allRepositories.map(function(r)
+    {
+        if ( r.tree == repo )
+        {
+            rep = r;
+        }
+    });
+
+    //return getRepositories([rep.path]);
+    return rep;
+}
+
+/**
+ * Return name of default branch as a string.
+ */
+function getDefaultBranch()
+{
+    return config.git.default_branch;
+}
+
+function getHead(repos , branch)
+{
+    if (branch == undefined)
+        branch = getDefaultBranch();
+
+}
+
+function run(repos , action , fn)
+{
+    git.setOptions({
+        cwd: repos.path,
+    });
+
+    switch ( action)
+    {
+        case ( "branch" ):
+        {
+            git.getLocalBranchList(function(branches)
+            {
+                if ( fn != undefined)
+                    fn(branches);
+            });
+            break;
+        }
+        case ( "tree" ):
+        {
+            git.getTreeList(repos.branch,function(tree)
+            {
+                if ( fn != undefined)
+                    fn(tree);
+            });
+            break;
+        }
+        case ( "readme" ):
+        {
+            git.getReadMe(repos.file.hash,function(result)
+            {
+                if ( fn != undefined)
+                    fn(result);
+            });
+            break;
+        }
+        default:
+        {
+            //-- custom command
+            break;
+        }
+    }
+}
+
+module.exports.run = run;
+module.exports.getHead = getHead;
+module.exports.getDefaultBranch = getDefaultBranch;
 module.exports.getRepositories = getRepositories;
+module.exports.getRepositoryFromName = getRepositoryFromName;
 module.exports.recurseDirectory = recurseDirectory;
