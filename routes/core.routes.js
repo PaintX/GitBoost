@@ -14,6 +14,22 @@ var routes =
         url : '/view',
         controller : 'TreeController',
         view : 'tree'
+    },
+    'commits' : {
+        url : '/commits',
+        controller : 'CommitsController',
+        view : 'commits_list'
+    }
+    ,
+    'stats' : {
+        url : '/stats',
+        controller : 'StatsController',
+        view : 'stats'
+    },
+    'network' : {
+        url : '/network',
+        controller : 'NetworkController',
+        view : 'network'
     }
 }
 

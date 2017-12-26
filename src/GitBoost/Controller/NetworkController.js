@@ -3,11 +3,11 @@ var config = require("../../../config");
 
 function _get (req, res, next , render)
 {
-    let objRet = {};
+    let objRet = {}
     objRet.repo = req.query.repo;
-
+    
     let repository = git.getRepositoryFromName(config.git.repositories, req.query.repo);
-
+    
     if ( req.query.tree == undefined )
     {
         req.query.tree = git.getHead(repository);
@@ -16,17 +16,21 @@ function _get (req, res, next , render)
     objRet.branch = req.query.tree;
     objRet.branches = git.getBranches(repository);
     objRet.tags = git.getTags(repository);
-    objRet.files = git.getTree(repository , req.query.tree);
-    objRet.readme = git.getReadMe(repository , req.query.tree);
- 
-    return objRet;
+
+    switch ( req.query.action)
+    {
+        case ( "view"):
+        {
+            objRet.commits = git.getCommits(repository);
+            res.send(JSON.stringify(objRet));
+            break;
+        }
+        default:
+        {
+            return objRet;
+        }
+    }
 }
 
-function _post (req, res, next)
-{
 
-    return {};
-}
-
-module.exports.post = _post;
 module.exports.get = _get;

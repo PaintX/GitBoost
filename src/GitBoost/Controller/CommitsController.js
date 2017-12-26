@@ -16,12 +16,29 @@ function _get (req, res, next , render)
     objRet.branch = req.query.tree;
     objRet.branches = git.getBranches(repository);
     objRet.tags = git.getTags(repository);
-    objRet.files = git.getTree(repository , req.query.tree);
-    objRet.readme = git.getReadMe(repository , req.query.tree);
- 
+
+    objRet.commits = [];
+
+    let obj = {};
+    git.getCommits(repository).map(function ( commit )
+    {
+        let idx = new Date( commit.dateCommit ).toDateString();
+
+        if ( obj[idx] == undefined)
+            obj[idx] = [];
+
+        obj[idx].push(commit);
+
+    });
+
+    for ( let key in obj )
+    {
+        objRet.commits.push({dateCommit : key , commit : obj[key]});
+    }
+
+
     return objRet;
 }
-
 function _post (req, res, next)
 {
 

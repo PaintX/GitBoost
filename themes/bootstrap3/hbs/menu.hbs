@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs">
-    <li><a href="">Files</a></li>
-    <li><a href="">Commits</a></li>
-    <li><a href="">Stats</a></li>
-  	<li><a href="">Network</a></li>
+    <li><a href="/view?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Files</a></li>
+    <li><a href="/commits?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Commits</a></li>
+    <li><a href="/stats?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Stats</a></li>
+  	<li><a href="/network?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Network</a></li>
 </ul>

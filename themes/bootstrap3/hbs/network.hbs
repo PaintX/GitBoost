@@ -1,0 +1,56 @@
+{{> html_header }}
+
+{{> navigation }}
+<div class="container">
+
+{{> header }}
+{{> breadcrumb }}
+
+<canvas id="gitGraph"></canvas>
+
+<script>
+$( document ).ready(function() {
+    var gitgraph = new GitGraph({
+        template: "metro", // or blackarrow
+        orientation: "vertical",
+        author: "John Doe",
+        mode: "extended" // or compact if you don't want the messages
+    });
+
+    $.get( "/network?action=view&repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}",function(data){
+
+        let dataJSON = JSON.parse(data);
+        var master = gitgraph.branch("master");
+
+        dataJSON.commits.map(function ( commit )
+        {
+            master.commit(commit); // 1 commit upon HEAD
+
+        });
+
+
+        
+
+        console.log(data);
+    });
+
+/*
+var master = gitgraph.branch("master");
+gitgraph.commit("My first commit"); // 1 commit upon HEAD
+var develop = gitgraph.branch("develop"); // New branch from HEAD
+var myfeature = develop.branch("myfeature"); // New branch from develop
+develop.commit("Develop a feature - part 1");
+develop.commit("Develop a feature - part 2");
+
+master.commit({message: "Fast bugfix", author: "John Fixer"});
+myfeature.commit({message: "New cool feature", author: "John Feature"});
+
+develop.merge(master);
+myfeature.merge(master);
+master.commit({message: "Release of version 0.1", tag: "0.1", author: "John Releaser", sha1: "abcdef0"});
+*/
+});
+</script>
+
+</div>
+{{> html_footer }}

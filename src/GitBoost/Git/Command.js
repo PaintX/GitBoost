@@ -1,11 +1,27 @@
-var _, exec, gitExec, options;
+var _, exec, gitExec, gitExecSync , options , execSync;
 
 exec = require('child_process').exec;
+execSync = require('child_process').execSync;
+var md5 = require('md5');
 
 _ = require('lodash');
 
 options = {
   cwd: './'
+};
+
+gitExecSync = function(cmd)
+{
+  try {
+    return execSync("git " + cmd, {
+      cwd: options.cwd,
+      encoding :"UTF-8"
+    });
+  }
+  catch(_error)
+  {
+    console.log(_error);
+  }
 };
 
 gitExec = function(cmd, timeout, callback, callbackIteration) {
@@ -149,10 +165,33 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
       return gitExec("branch", function(result) {
         var branches;
         branches = result.split("\n").map(function(item) {
-          return item.trim().replace(/\s+\*\s+/);
+          return item.trim().replace(/\*\s+/);
         });
         return typeof callback === "function" ? callback(branches) : void 0;
       });
+    },
+    getLocalBranchListSync: function() {
+        let result = gitExecSync("branch");
+        let req = new RegExp(/\*\s+/);
+        let branches = [];
+         result.split("\n").map(function(item) {
+          if ( item.trim().replace(req,"").length != 0)
+            branches.push(item.trim().replace(req,""));
+        });
+        return branches;
+    },
+    getLocalTagsListSync : function()
+    {
+      let result = gitExecSync("tag");
+      let tags = [];
+      result.split("\n").map(function(item) {
+        if ( item.trim().length != 0)
+        {
+          tags.push(item.trim());
+        }
+      });
+      return tags;
+    
     },
     getRemoteBranchList: function(callback) {
       return gitExec("branch -r", function(result) {
@@ -180,6 +219,20 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
             return callback(result);
         });
     },
+    getTreeListSync : function ( branchName )
+    {
+      let result = gitExecSync("ls-tree -l " + branchName );
+      //let req = new RegExp("/[\s]+/");
+      let lines = [];
+      result.split('\n').map(function(line){
+          if ( line.trim().length != 0)
+          {
+            lines.push(line);
+          }
+      });
+
+      return lines;
+    },
     getReadMe : function ( hash , callback )
     {
       return gitExec("cat-file -p " + hash , function(result)
@@ -187,4 +240,58 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
           return callback(result);
       });
     },
+    getFileSync : function( hash )
+    {
+        return gitExecSync("cat-file -p " + hash);
+    },
+    getCommitsListSync : function ( )
+    {
+      let tab = gitExecSync('log --pretty=format:"%H | %h | %an | %cd | %s ##"').split('##\n');
+
+      let commitsList = [];
+      tab.map(function(t)
+      {
+        let obj = {};
+
+        let infos = t.split(' | ');
+
+
+        obj.hash = infos[0];
+        obj.short_hash = infos[1];
+        obj.author = infos[2];
+        obj.authorMD5 = md5(infos[2].toLowerCase()) ;
+        obj.dateCommit = infos[3];
+        obj.message = infos[4].replace("##" , "" );
+
+        commitsList.push(obj);
+      });
+
+      return commitsList;
+    },
+    getRecursivTreeListSync : function(branchName)
+    {
+      let result = gitExecSync("ls-tree -r -l " + branchName );
+      let lines = [];
+      result.split('\n').map(function(line){
+          if ( line.trim().length != 0)
+          {
+            lines.push(line);
+          }
+      });
+
+      return lines;
+    },
+    getAuthorSync : function ( branchName )
+    {
+      let result = gitExecSync('log --pretty=format:"%an||%ae" ' + branchName );
+      let lines = [];
+      result.split('\n').map(function(line){
+          if ( line.trim().length != 0)
+          {
+            lines.push(line);
+          }
+      });
+      return lines;
+    },
+
   };

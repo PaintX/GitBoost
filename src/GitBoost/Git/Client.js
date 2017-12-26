@@ -1,6 +1,8 @@
 var fs = require('fs');
 var config = require("../../../config");
 var git = require('./Command');
+var pretty = require('prettysize')
+var md5 = require('md5');
 
 var repositories = {};
 
@@ -101,71 +103,232 @@ function getRepositoryFromName(paths , repo)
         }
     });
 
-    //return getRepositories([rep.path]);
     return rep;
 }
 
-/**
- * Return name of default branch as a string.
- */
-function getDefaultBranch()
-{
-    return config.git.default_branch;
-}
 
-function getHead(repos , branch)
+function getHead(repos)
 {
-    if (branch == undefined)
-        branch = getDefaultBranch();
+    let file = '';
+    if ( fs.existsSync(repos.path + '/.git/HEAD') )
+        file = fs.readFileSync(repos.path + '/.git/HEAD',"UTF-8");
+    else if ( fs.existsSync(repos.path + '/HEAD') )
+        file = fs.readFileSync(repos.path + '/HEAD',"UTF-8");
 
-}
+    // Find first existing branch
+    let fileLines = file.split("\n");
+    let branche = undefined; 
+    fileLines.map(function(line)
+    {
+        let regexp = new RegExp('ref: refs/heads/(.+)');
+        let m = line.match(regexp);
+        if ( m == undefined)
+            return;
 
-function run(repos , action , fn)
-{
-    git.setOptions({
-        cwd: repos.path,
+        if ( hasBranch(repos , m[1]) == true )
+        {
+            branche = m[1];
+        }
     });
 
-    switch ( action)
-    {
-        case ( "branch" ):
-        {
-            git.getLocalBranchList(function(branches)
-            {
-                if ( fn != undefined)
-                    fn(branches);
-            });
-            break;
-        }
-        case ( "tree" ):
-        {
-            git.getTreeList(repos.branch,function(tree)
-            {
-                if ( fn != undefined)
-                    fn(tree);
-            });
-            break;
-        }
-        case ( "readme" ):
-        {
-            git.getReadMe(repos.file.hash,function(result)
-            {
-                if ( fn != undefined)
-                    fn(result);
-            });
-            break;
-        }
-        default:
-        {
-            //-- custom command
-            break;
-        }
-    }
+    return branche;
 }
 
-module.exports.run = run;
+/**
+ * Check if a specified branch exists
+ *
+ * @param  string  $branch Branch to be checked
+ * @return boolean True if the branch exists
+ */
+function hasBranch(repos , branch)
+{
+    git.setOptions({cwd : repos.path});
+    let branches = git.getLocalBranchListSync();
+    let status = false;
+    branches.map(function(branche)
+    {
+        if ( branche == branch)
+        status = true;
+    });
+
+    return status;
+}
+
+
+/**
+ * Show a list of the repository branches
+ *
+ * @return array List of branches
+ */
+function getBranches(repos)
+{
+    git.setOptions({cwd : repos.path});
+    let regexp = new RegExp('[\* ]');
+    let branches = [];
+    git.getLocalBranchListSync().map(function(b){
+        branches.push(b.replace(regexp,'').trim());
+    });
+
+   return branches;
+}
+
+function getTags(repos , branch )
+{
+    git.setOptions({cwd : repos.path});  
+    return git.getLocalTagsListSync();
+}
+
+
+/**
+ * Get the Tree for the provided folder
+ *
+ * @param  string $tree Folder that will be parsed
+ * @return Tree   Instance of Tree for the provided folder
+ */
+function getTree(repos , branch )
+{
+    let files = [];
+    git.setOptions({cwd : repos.path});
+    let treeLines = git.getTreeListSync(branch);
+    let tree = [];
+
+    treeLines.map(function(line)
+    {
+        let obj = {};
+        let infos = [];
+        line.replace('\t' , " ").split(" ").map(function(l){
+
+            if ( l.length > 0)
+            {
+                infos.push(l);
+            }
+        });
+
+
+
+        obj.type = infos[1];
+        obj.name = infos[4];
+        obj.size = infos[3];
+        obj.mode = infos[0];
+        obj.hash = infos[2];
+        obj.path = repos.path + "/" + obj.name;
+
+        files.push(obj);
+    });
+
+    files.sort(function(a , b )
+    {
+        return b.type.localeCompare(a.type);
+    });
+
+    return files;
+}
+
+function getReadMe(repos , branch)
+{
+    let objRet = {};
+    git.setOptions({cwd : repos.path});
+    getTree(repos , branch).map(function(fi){
+        if ( fi.type == "blob" && fi.name.toLowerCase().startsWith("readme"))
+        {
+            objRet.filename = fi.name;
+            objRet.content = git.getFileSync(fi.hash);
+        }
+    });
+
+    return objRet;
+}
+
+function getCommits(repos)
+{
+    git.setOptions({cwd : repos.path});
+    return git.getCommitsListSync();
+}
+
+function getStats(repos , branch)
+{
+    git.setOptions({cwd : repos.path});
+    let lines = git.getRecursivTreeListSync(branch);
+    let files = [];
+    lines.map(function(line)
+    {
+        let obj = {};
+        let infos = [];
+
+        line.replace('\t' , " ").split(" ").map(function(l){
+
+            if ( l.length > 0)
+            {
+                infos.push(l);
+            }
+        });
+
+        obj.type = infos[1];
+        obj.name = infos[4];
+        obj.size = infos[3];
+        obj.mode = infos[0];
+        obj.hash = infos[2];
+        if ( obj.name.lastIndexOf('.') != -1 )
+            obj.extension = obj.name.substring(obj.name.lastIndexOf('.'), obj.name.length);
+        obj.path = repos.path + "/" + obj.name;
+
+        files.push(obj);
+    });
+
+    let extensions = {};
+    let extTab = [];
+    let totalSize = 0;
+    files.map(function(file){
+
+        if ( file.extension != undefined )
+        {
+            if ( extensions[file.extension] == undefined )
+                extensions[file.extension] = 0;
+
+            totalSize += parseInt(file.size);
+            extensions[file.extension]++;            
+        }
+    });
+
+    let nbFiles = 0;
+    for ( let key in extensions)
+    {
+        nbFiles+= extensions[key];
+        extTab.push({name : key , nb : extensions[key]});
+    }
+
+    return {extensions : extTab , nbFiles : nbFiles , totalSize : pretty(totalSize)};
+}
+
+function getAuthorStatistics(repos , branch )
+{
+    git.setOptions({cwd : repos.path});
+    let lines = git.getAuthorSync(branch);
+    let users = [];
+    let user = {};
+    lines.map(function(line)
+    {
+        if (user[line] == undefined ) 
+            user[line] = 0;       
+        user[line]++;
+    });
+
+    for ( let key in user)
+    {
+        users.push({user : key.split("||")[0] , email : key.split("||")[1] , commits : user[key] , gravatarMD5 :md5(key.split("||")[1].toLowerCase()) });
+    }
+
+    return users;
+}
+
+module.exports.getAuthorStatistics = getAuthorStatistics;
+module.exports.getStats = getStats;
+module.exports.getCommits = getCommits;
+module.exports.getReadMe = getReadMe;
+module.exports.getTags = getTags;
+module.exports.getTree = getTree;
+module.exports.getBranches = getBranches;
 module.exports.getHead = getHead;
-module.exports.getDefaultBranch = getDefaultBranch;
 module.exports.getRepositories = getRepositories;
 module.exports.getRepositoryFromName = getRepositoryFromName;
 module.exports.recurseDirectory = recurseDirectory;
