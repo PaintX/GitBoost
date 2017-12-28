@@ -246,7 +246,31 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
     },
     getCommitsListSync : function ( )
     {
-      let tab = gitExecSync('log --pretty=format:"%H | %h | %an | %cd | %s ##"').split('##\n');
+      let result = gitExecSync("branch --v");
+
+      let req = new RegExp(/\*\s+/);
+      let branchesTab = [];
+       result.split("\n").map(function(item) {
+        if ( item.trim().replace(req,"").length != 0)
+          branchesTab.push(item.trim().replace(req,""));
+      });
+      let branches = [];
+
+      branchesTab.map(function(branch){
+        let tabBr = [];
+        
+        branch.split(" ").map(function(entry)
+        {
+          if ( entry != "")
+            tabBr.push(entry);
+        });
+
+        branches.push({ nom : tabBr[0] , parent : tabBr[1] });
+
+      });
+
+
+      let tab = gitExecSync('log --pretty=format:"%H | %h | %an | %cd | %s | %D | %p ##"').split('##\n');
 
       let commitsList = [];
       tab.map(function(t)
@@ -261,11 +285,83 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
         obj.author = infos[2];
         obj.authorMD5 = md5(infos[2].toLowerCase()) ;
         obj.dateCommit = infos[3];
-        obj.message = infos[4].replace("##" , "" );
+        obj.message = infos[4]; //.replace("##" , "" );
+/*
+        let str = infos[5];//.replace("##" , "" );
+        if ( str == " ")
+          str = "";
 
+        if ( str.startsWith("tag: ") )
+        {
+          obj.tag = str.replace("tag: " , "" );
+        }
+*/
+      /*  let parentStr = infos[6].replace("##" , "" ).split(" ")[0];
+
+        obj.parent = parentStr;*/
+/*
+        branches.map(function(branch){
+          if ( branch.parent == obj.short_hash )
+          {
+            obj.infos = {};
+            obj.infos.branche = branch.nom;
+
+            let hashTab = [] ;
+            infos[6].replace("##" , "" ).split(" ").map(function(entry)
+            {
+              if ( entry != "" )
+                hashTab.push(entry);
+            });
+
+            if ( hashTab.length == 1 )
+              obj.infos.action = "commit";
+
+            if ( hashTab.length == 2 )
+            {
+                obj.infos.action = "merge";
+
+                branches.map(function(branch){
+                    if ( hashTab[1] ==  branch.parent)
+                    {
+                      obj.infos.dest = branch.nom;
+                    }
+                });
+                
+            }
+            
+            obj.infos.parent = obj.short_hash;
+
+            branch.parent = hashTab[0];
+          }
+        });
+*/
         commitsList.push(obj);
       });
 
+/*
+      let masterHash = {}
+      branchesTab.map(function(branch){
+        let tabBr = [];
+        
+        branch.split(" ").map(function(entry)
+        {
+          if ( entry != "")
+            tabBr.push(entry);
+        });
+
+        if ( tabBr[0] == "master")
+        masterHash = { nom : tabBr[0] , parent : tabBr[1] } 
+      });
+
+      commitsList.map(function(commit)
+      {
+        if ( commit.short_hash == masterHash.parent )
+        {
+          commit.infos.branche = masterHash.nom;
+          masterHash.parent = commit.infos.parent;
+        }
+      });
+*/
       return commitsList;
     },
     getRecursivTreeListSync : function(branchName)
@@ -293,5 +389,30 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
       });
       return lines;
     },
+    getGraphSync : function ( )
+    {
+      let result = gitExecSync("log --branches --graph --oneline --parents");
+      let lines = [];
+      result.split('\n').map(function(line){
+          if ( line.trim().length != 0)
+          {
+            lines.push(line);
+          }
+      });
+      return lines;
+
+    },
+    getBranchesWithHashSync : function()
+    {
+      let result = gitExecSync("branch -av | cut -b 3-");
+      let lines = [];
+      result.split('\n').map(function(line){
+          if ( line.trim().length != 0)
+          {
+            lines.push(line);
+          }
+      });
+      return lines;
+    }
 
   };

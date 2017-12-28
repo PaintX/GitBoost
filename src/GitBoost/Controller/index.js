@@ -6,6 +6,7 @@ function _get (req, res, next , render)
     let repositories = git.getRepositories(config.git.repositories);
     return {repositories : repositories};
 }
+
 function _post (req, res, next)
 {
 

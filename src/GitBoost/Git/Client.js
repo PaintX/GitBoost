@@ -321,6 +321,23 @@ function getAuthorStatistics(repos , branch )
     return users;
 }
 
+function getGraph(repos)
+{
+    git.setOptions({cwd : repos.path});
+    let lines = git.getGraphSync();
+
+    return lines;
+}
+
+function getBranchesWithHash(repos)
+{
+    git.setOptions({cwd : repos.path});
+    let lines = git.getBranchesWithHashSync();
+    return lines;
+}
+
+module.exports.getBranchesWithHash = getBranchesWithHash;
+module.exports.getGraph = getGraph;
 module.exports.getAuthorStatistics = getAuthorStatistics;
 module.exports.getStats = getStats;
 module.exports.getCommits = getCommits;
