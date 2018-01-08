@@ -22,49 +22,6 @@ $( document ).ready(function() {
 
         let dataJSON = JSON.parse(data);
 
-        //let branches = {};
-
-       // branches["master"] = gitgraph.branch("master");
-
-      /*  dataJSON.branches.map(function(branche)
-        {
-            branches[branche] = gitgraph.branch(branche);
-        });*/
-/*
-        dataJSON.commits.sort( function(a , b )
-        {
-            let date1 = new Date(a.dateCommit);
-            let date2 = new Date(b.dateCommit);
-
-            return date1.getTime() - date2.getTime();
-        });
-
-        dataJSON.commits.map(function ( commit )
-        {
-            if ( branches[commit.infos.branche] == undefined )
-            {
-                branches[commit.infos.branche] = gitgraph.branch(commit.infos.branche);
-            }
-            switch ( commit.infos.action )
-            {
-                case ( "merge" ):
-                {
-                    
-                    branches[commit.infos.dest].merge(branches[commit.infos.branche],commit);
-                    break;
-                }
-                case ( "commit" ):{
-                    branches[commit.infos.branche].commit(commit); // 1 commit upon HEAD
-                    break;
-                }
-            }
-
-            
-
-        });
-*/
-
-        
         var textToPrint = "";
         dataJSON.graphLines.map(function(line)
         {
@@ -314,22 +271,6 @@ $( document ).ready(function() {
         }
         export_to_tikz();*/
     });
-
-/*
-var master = gitgraph.branch("master");
-gitgraph.commit("My first commit"); // 1 commit upon HEAD
-var develop = gitgraph.branch("develop"); // New branch from HEAD
-var myfeature = develop.branch("myfeature"); // New branch from develop
-develop.commit("Develop a feature - part 1");
-develop.commit("Develop a feature - part 2");
-
-master.commit({message: "Fast bugfix", author: "John Fixer"});
-myfeature.commit({message: "New cool feature", author: "John Feature"});
-
-develop.merge(master);
-myfeature.merge(master);
-master.commit({message: "Release of version 0.1", tag: "0.1", author: "John Releaser", sha1: "abcdef0"});
-*/
 });
 </script>
 

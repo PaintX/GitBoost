@@ -332,7 +332,16 @@ function getGraph(repos)
 function getBranchesWithHash(repos)
 {
     git.setOptions({cwd : repos.path});
-    let lines = git.getBranchesWithHashSync();
+    let lines = [];
+    git.getBranchesWithHashSync().map(function(l)
+    {
+        let line = [];
+        l.split(" ").map(function ( word ) {
+            if ( word != "" )
+                line.push(word);
+        });
+        lines.push(line);
+    });
     return lines;
 }
 

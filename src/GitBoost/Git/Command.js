@@ -296,9 +296,9 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
           obj.tag = str.replace("tag: " , "" );
         }
 */
-      /*  let parentStr = infos[6].replace("##" , "" ).split(" ")[0];
-
-        obj.parent = parentStr;*/
+       let parentStr = infos[6].replace("##" , "" );
+console.log(infos[6]);
+        obj.parent = parentStr;
 /*
         branches.map(function(branch){
           if ( branch.parent == obj.short_hash )
