@@ -21,10 +21,8 @@ function _get (req, res, next , render)
     {
         case ( "view"):
         {
-            //objRet.commits = git.getCommits(repository);
-
+            objRet.graphLogs = git.getLogsForGraph(repository);
             objRet.graphLines = git.getGraph(repository);
-            objRet.branches = git.getBranchesWithHash(repository);
             res.send(JSON.stringify(objRet));
             break;
         }

@@ -6,271 +6,58 @@
 {{> header }}
 {{> breadcrumb }}
 
-<canvas id="gitGraph"></canvas>
+<style type="text/css">
+        @font-face {
+            font-family: "Atlassian Icons";
+            src: url(http://aui-cdn.atlassian.com/aui-adg/5.9.6/css/fonts/atlassian-icons.eot);
+            src: url(http://aui-cdn.atlassian.com/aui-adg/5.9.6/css/fonts/atlassian-icons.eot?#iefix) format("embedded-opentype"), 
+            url(http://aui-cdn.atlassian.com/aui-adg/5.9.6/css/fonts/atlassian-icons.woff) format("woff"), 
+            url(http://aui-cdn.atlassian.com/aui-adg/5.9.6/css/fonts/atlassian-icons.ttf) format("truetype"), 
+            url(http://aui-cdn.atlassian.com/aui-adg/5.9.6/css/fonts/atlassian-icons.svg#atlassian-icons) format("svg");
+            font-weight: normal;
+            font-style: normal;
+        }
+        #bit-booster-tbl, #bit-booster-tbl * { line-height: 1.0; font-family: monospace; border-spacing: 0; margin:0; border: 0; padding: 0; font-size: 16px;}
+        #bit-booster-tbl span.icon { font-family: "Atlassian Icons"; font-size: 16px; padding-left: 2px; }
+        #bit-booster-tbl td.d { font-style: italic; color: darkgray; padding-left: 0.7em; white-space: nowrap; }
+        #bit-booster-tbl td.commit { padding: 4px 1px; }
+</style>
+
+<div width="60%" class="commits-content">
+    <div id="download"></div>
+    <table id="bit-booster-tbl" style="width: 1%;">
+        <tbody>
+            <tr>
+                <td rowspan="99999" style="vertical-align: top;">
+                    <svg xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="20" text-rendering="optimizeLegibility" style="border: 0px; margin: 0px; padding: 0;" id="bit-booster"></svg>
+                </td>
+                <td style="width: 99%; vertical-align: top;">
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="output"></div>
+
 <div id="gitGraphText"></div>
 
 <script>
 $( document ).ready(function() {
-    var gitgraph = new GitGraph({
-        template: "metro", // or blackarrow
-        orientation: "vertical-reverse",
-        author: "John Doe",
-        mode: "extended" // or compact if you don't want the messages
-    });
 
     $.get( "/network?action=view&repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}",function(data){
-
-        let dataJSON = JSON.parse(data);
-
-        var textToPrint = "";
-        dataJSON.graphLines.map(function(line)
+        let graphLines = JSON.parse(data).graphLines;
+        let lines = "";
+        graphLines.map(function(line)
         {
-            textToPrint += line + "<br>";
+            lines += line + "<br>";
         });
-        $("#gitGraphText").html(textToPrint);
+        $("#gitGraphText").html(lines);
 
-
-        var commits = [];
-        var branches = [];
-
-        dataJSON.graphLines.map(function(line)
-        {
-            var obj = {
-                sha1  : null,
-                children : [],
-                parents : [],
-                message  : "",
-                node_pos  : 0,
-                branches: [],
-                message_pos : 0,
-                colours : ["ForestGreen", "Dandelion", "Red", "cyan", "magenta", "orange"],
-            };
-
-            function build ( l )
-            {
-                var pos = 0;
-                l.split(" ").map(function(word)
-                {
-                    let req = new RegExp(/[a-f0-9]{7}/);
-                    let req2 = new RegExp(/[^|\/\\]/);
-                    if ( obj.message == "" && word.match(req))
-                    {
-                        if ( !obj.sha1 )
-                            obj.sha1 = word;
-                        else
-                            obj.parents.push(word);
-                    }
-                    else if ( word == '*')
-                    {
-                        obj.node_pos = pos;
-                        obj.node_color = obj.colours[pos]
-                    }
-                    else if (word.match(req2))
-                    {
-                        obj.message_pos = pos;
-                        obj.message += word + " ";
-                    }
-                    pos = pos + 1;
-                });
-
-                if (  !obj.sha1 )
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-
-
-            if ( build(line) )
-                commits.push(obj);
-
-        });
-
-        function resolve_parents()
-        {
-            function setparent(commit , parent)
-            {
-                parent.children.push(commit.sha1);
-            }
-
-            commits.map(function(commit)
-            {
-                commit.parents.map(function(parent)
-                {
-                    commits.map(function(c)
-                    {
-                        if ( c.sha1 == parent)
-                        {
-                            setparent( commit , c );
-                        }
-                    });
-                });
-            });
-        }
-
-
-        resolve_parents();
-
-        dataJSON.branches.map(function(line){
-            var obj = {
-                name : "",
-                sha1 : "",
-                commit : null,
-                gitgraph : null,
-            };
-
-            var words = [];
-            line.split(" ").map(function(word){
-                if ( word != "" )
-                    words.push(word);
-            });
-
-            if ( words[0].startsWith("remotes/") == true )
-                return;
-            obj.name = words[0];
-            obj.sha1 = words[1];
-
-            function add_branch(branch)
-            {
-                let c = null;
-
-                commits.map(function(commit){
-
-                    if ( commit.sha1 == branch.sha1 )
-                    {
-                        branch.commit = commit.sha1;
-                        branches.push(branch);
-                    }
-                });
-            }
-
-            add_branch(obj);
-        });
-
-       /* branches.map(function(branch){
-            
-        });*/
-
-        let topBranch = undefined;
-
-        branches.map(function(branch){
-
-            function parse(sha1)
-            {
-                commits.map(function(commit){
-                    if ( commit.sha1 == sha1 )
-                    {
-                        commit.branches.push(branch);
-                        parse(commit.parents[0]);
-                    }
-
-                });
-            }
-
-            parse(branch.sha1);
-        });           
-
-        topBranch = commits[0].branches[0];
-
-        if ( topBranch.gitgraph == undefined )
-            topBranch.gitgraph = gitgraph.branch(topBranch.name);
-
-        commits.reverse();
-
-        commits.map(function(commit){
-
-            let topBrancheFound = false;
-           commit.branches.map(function(branche)
-           {
-               if ( branche.name == topBranch.name)
-                topBrancheFound = true;
-           });
-
-            let gtGraph = undefined;
-           if (topBrancheFound == true)
-           {
-               gtGraph = topBranch.gitgraph;
-           }
-           else
-           {
-                if ( commit.branches[0].gitgraph == undefined)
-               {
-
-               }
-
-               gtGraph = commit.branches[0].gitgraph;
-           }
-
-            gtGraph.commit(commit);
-        });
-
-
-
-
-       /* commits.map(function(commit)
-        {
-            branches.map(function(branche)
-            {
-                if ( commit.sha1 == branche.sha1)
-                {
-                    commit.branches.push(branche.name);
-                    branche.sha1 = 
-                }  
-            })
-        });*/
-
-
-/*
-        let tikzFile = [];
-
-        function export_to_tikz()
-        {
-            tikzFile.push("\\begin{tikzpicture}");
-            tikzFile.push("\\tikzstyle{commit}=[draw,circle,fill=white,inner sep=0pt,minimum size=5pt]");
-            tikzFile.push("\\tikzstyle{every path}=[draw]");
-            tikzFile.push("\\tikzstyle{branch}=[draw,rectangle,rounded corners=3,fill=white,inner sep=2pt,minimum size=5pt]");
-
-            var ypos = 0;
-            var ystep=-0.5;
-
-            function export_to_tikz2( commit , ypos )
-            {
-                tikzFile.push("\\node[commit, "+commit.node_color+", fill="+commit.node_color+"] ("+commit.sha1+") at ("+ (parseInt(commit.node_pos) * 0.5).toString() +","+ypos+") {};");
-                tikzFile.push("\\node[right,xshift=10] (label_"+commit.sha1+") at ("+commit.sha1+".east) {\\verb!"+commit.sha1+": "+commit.message+"!};");
-
-                let parentCommit = {};
-                for ( let key in commit.parents)
-                {
-                    parentCommit = commit.parents[key];
-                }
-
-                master.commit(commit);
-                for ( let key in commit.children )
-                {
-                    let child = commit.children[key];
-
-                    tikzFile.push("\\path["+commit.node_color+"] ("+commit.sha1+") to[out=90,in=-90] ("+child.sha1+");");
-                }
-            }
-
-            for ( let key in commits)
-            {
-                export_to_tikz2(commits[key],ypos);
-                ypos = ypos + ystep;
-            }
-
-            branches.map(function(branch){
-
-                 tikzFile.push("\\node[branch,right,xshift=10] ("+branch.name+") at (label_"+branch.hash+".east) {\\lstinline{"+branch.name+"}};");   
-            });
-
-            tikzFile.push("\\end{tikzpicture}");
-        }
-        export_to_tikz();*/
+        dg(JSON.parse(data).graphLogs);
     });
+
 });
 </script>
 

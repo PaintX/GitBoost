@@ -413,6 +413,10 @@ console.log(infos[6]);
           }
       });
       return lines;
+    },
+    getLogsForGraph : function()
+    {
+      return gitExecSync('log --all --date-order --pretty="%H|%P|%d"');
     }
 
   };

@@ -345,6 +345,13 @@ function getBranchesWithHash(repos)
     return lines;
 }
 
+function getLogsForGraph(repos)
+{
+    git.setOptions({cwd : repos.path});
+    return git.getLogsForGraph();
+}
+
+module.exports.getLogsForGraph = getLogsForGraph;
 module.exports.getBranchesWithHash = getBranchesWithHash;
 module.exports.getGraph = getGraph;
 module.exports.getAuthorStatistics = getAuthorStatistics;
