@@ -1,8 +1,9 @@
 
-
+{{#if breadCrumbPath}}
 <ol class="breadcrumb">
-    <li><a href="/view?repo={{repo}}&tree={{ branch }}">{{ repo }}</a></li>
-   
+    {{#each breadCrumbPath}}
+        <li><a href="/view?repo={{../repo}}&path={{this.path}}&tree={{ ../branch }}">{{this.text}}</a></li>
+    {{/each}}
     <div class="pull-right">
         <div class="btn-group download-buttons">
             <button type="button" href="" class="btn btn-default btn-xs" title="Download '{{ branch }}' as a ZIP archive">ZIP</button>
@@ -11,4 +12,4 @@
         </div>
     </div>
 </ol>
-
+{{/if}}

@@ -20,7 +20,7 @@
                 <tr>
                     <td>
                         {{#eq type "tree"}}
-                            <span class="fa fa-folder-open"></span> <a href="">{{ name }}</a>
+                            <span class="fa fa-folder-open"></span> <a href="/view?repo={{../repo}}&path={{../repopath}}/{{ name }}&tree={{../branch }}">{{ name }}</a>
                         {{/eq}}
                         {{#eq type "folder"}}
                             <span class="fa fa-folder-open"></span> <a href="">{{ name }}</a>

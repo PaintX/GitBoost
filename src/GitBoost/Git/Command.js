@@ -297,7 +297,7 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
         }
 */
        let parentStr = infos[6].replace("##" , "" );
-console.log(infos[6]);
+
         obj.parent = parentStr;
 /*
         branches.map(function(branch){
