@@ -1,6 +1,6 @@
 {
   "name": "gitboost",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "an elegant git repositorie browser",
   "main": "app.js",
   "directories": {
