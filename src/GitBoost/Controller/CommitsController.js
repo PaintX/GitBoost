@@ -36,7 +36,7 @@ function _get (req, res, next , render)
         objRet.commits.push({dateCommit : key , commit : obj[key]});
     }
 
-
+    objRet.commitMenuActive = true;
     return objRet;
 }
 function _post (req, res, next)

@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs">
-    <li><a href="/view?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Files</a></li>
-    <li><a href="/commits?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Commits</a></li>
-    <li><a href="/stats?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Stats</a></li>
-  	<li><a href="/network?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Network</a></li>
+    <li {{#if treeMenuActive}}class="active"{{/if}}><a href="/view?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Files</a></li>
+    <li {{#if commitMenuActive}}class="active"{{/if}}><a href="/commits?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Commits</a></li>
+    <li {{#if statMenuActive}}class="active"{{/if}}><a href="/stats?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Stats</a></li>
+  	<li {{#if networkMenuActive}}class="active"{{/if}}><a href="/network?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Network</a></li>
 </ul>

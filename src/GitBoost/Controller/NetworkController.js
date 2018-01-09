@@ -16,12 +16,13 @@ function _get (req, res, next , render)
     objRet.branch = req.query.tree;
     objRet.branches = git.getBranches(repository);
     objRet.tags = git.getTags(repository);
-
+    objRet.networkMenuActive = true;
     switch ( req.query.action)
     {
         case ( "view"):
         {
             objRet.graphLogs = git.getLogsForGraph(repository);
+            objRet.graphData = git.getdataForGraph(repository);
             objRet.graphLines = git.getGraph(repository);
             res.send(JSON.stringify(objRet));
             break;

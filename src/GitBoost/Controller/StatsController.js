@@ -19,6 +19,7 @@ function _get (req, res, next , render)
 
     objRet.stats = git.getStats(repository , objRet.branch);
     objRet.authors = git.getAuthorStatistics(repository , objRet.branch);
+    objRet.statMenuActive = true;
     return objRet;
 }
 

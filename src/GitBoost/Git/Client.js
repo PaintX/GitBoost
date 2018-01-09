@@ -351,6 +351,121 @@ function getLogsForGraph(repos)
     return git.getLogsForGraph();
 }
 
+function getdataForGraph(repos)
+{
+    //let branches = getBranchesWithHash(repos);
+    let branch_idx = 0;
+    let branches = {};
+    let reserve = [];
+    let nodes = [];
+    let commits = getLogsForGraph(repos).split('\n');
+
+    function get_branch(sha)
+    {
+        if ( branches[sha] == undefined )
+        {
+            branches[sha] = branch_idx;
+            reserve.push(branch_idx);
+            branch_idx++;
+        }
+
+        return branches[sha];
+    }
+
+    function _make_node(sha, offset, branch, routes)
+    {
+        let tab = [];
+        tab.push(sha);
+        tab.push([offset , branch]);
+        tab.push(routes);
+        return tab;
+    }
+
+    commits.map(function(commit){
+        if ( commit == "" )
+            return;
+        let sha = commit.split("|")[0];
+        let branch = get_branch(sha);
+        let n_parents = commit.split("|")[1].split(" ").length;
+        let offset = reserve[branch];
+        let routes = [];
+        
+        if ( n_parents == 1)
+        {
+            //-- create branch
+            if ( branches[commit.split("|")[1].split(" ")[0]] != undefined)
+            {
+                let b = reserve[offset];
+                for ( let i = offset ; i < reserve.length ; i++)
+                {
+                    let tab = [];
+                    tab.push(i);
+                    tab.push(i);
+                    tab.push(reserve[i]);
+    
+                        routes.push(tab);  
+                }
+                for ( let i = 0 ; i < offset ; i++)
+                {
+                    let tab = [];
+                    tab.push(i);
+                    tab.push(i);
+                    tab.push(reserve[i]);
+
+                        routes.push(tab);  
+                }
+                //my_list.remove(4) # Removes the integer 4 from the list, not the index 4
+                let idxToRemove = undefined;
+                reserve.map(function(interger, idx)
+                {
+                    if ( interger == branch)  
+                        idxToRemove = idx;
+                })
+
+                if ( idxToRemove != undefined)
+                    reserve.splice(idxToRemove, 1);
+                routes.push([offset , reserve[branches[commit.split("|")[1].split(" ")[0]]] , branch]);
+            }
+            else
+            {
+                branches[commit.split("|")[1].split(" ")[0]] = branch;
+                reserve.map(function ( b , i )
+                {
+                    let tab = [];
+                    tab.push(i);
+                    tab.push(i);
+                    tab.push(b);
+
+                        routes.push(tab);
+                });
+            }
+        }
+        else if ( n_parents == 2)
+        {
+            //-- merge branch
+            branches[commit.split("|")[1].split(" ")[0]] = branch;
+            reserve.map(function ( b , i )
+            {
+                let tab = [];
+                tab.push(i);
+                tab.push(i);
+                tab.push(b);
+
+                    routes.push(tab);
+            });
+
+            let other_branch = get_branch(commit.split("|")[1].split(" ")[1]);
+            routes.push([offset , reserve[other_branch] , other_branch]);
+        }
+
+        console.log(JSON.stringify(_make_node(sha , offset , branch , routes)) + ",");
+        nodes.push(_make_node(sha , offset , branch , routes));
+    });
+
+    return nodes;
+}
+
+module.exports.getdataForGraph = getdataForGraph;
 module.exports.getLogsForGraph = getLogsForGraph;
 module.exports.getBranchesWithHash = getBranchesWithHash;
 module.exports.getGraph = getGraph;

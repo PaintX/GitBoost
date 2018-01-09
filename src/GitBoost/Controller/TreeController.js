@@ -19,6 +19,7 @@ function _get (req, res, next , render)
     objRet.files = git.getTree(repository , req.query.tree);
     objRet.readme = git.getReadMe(repository , req.query.tree);
  
+    objRet.treeMenuActive = true;
     return objRet;
 }
 

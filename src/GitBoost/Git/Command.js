@@ -416,7 +416,7 @@ console.log(infos[6]);
     },
     getLogsForGraph : function()
     {
-      return gitExecSync('log --all --date-order --pretty="%H|%P|%d"');
+      return gitExecSync('log --all --date-order --pretty="%h|%p|%d"');
     }
 
   };
