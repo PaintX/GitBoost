@@ -1,0 +1,41 @@
+{
+  "name": "gitboost",
+  "version": "0.0.2",
+  "description": "an elegant git repositorie browser",
+  "main": "app.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "cookie-parser": "^1.4.3",
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.6",
+    "handlebars-helpers": "^0.10.0",
+    "lodash": "^4.17.4",
+    "md5": "^2.2.1",
+    "prettysize": "^1.1.0",
+    "simple-git": "^1.85.0",
+    "git-interface": "^0.1.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaintX/GitBoost.git"
+  },
+  "keywords": [
+    "git",
+    "modejs"
+  ],
+  "author": "RemyAr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaintX/GitBoost/issues"
+  },
+  "homepage": "https://github.com/PaintX/GitBoost#readme"
+}
