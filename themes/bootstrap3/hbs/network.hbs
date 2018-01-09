@@ -1,0 +1,36 @@
+{{> html_header }}
+
+{{> navigation }}
+<div class="container">
+
+{{> header }}
+{{> breadcrumb }}
+
+
+
+<div id="output" data-graph=''></div>
+
+<div id="gitGraphText"></div>
+
+<script>
+$( document ).ready(function() {
+
+    $.get( "/network?action=view&repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}",function(data){
+        let graphLines = JSON.parse(data).graphLines;
+        let lines = "";
+        graphLines.map(function(line)
+        {
+            lines += line + "<br>";
+        });
+        $("#gitGraphText").html(lines);
+        $("#output").attr('data-graph', JSON.parse(data).graphData);
+        $("[data-graph]").commits({
+            orientation: "horizontal",
+        });
+    });
+
+});
+</script>
+
+</div>
+{{> html_footer }}

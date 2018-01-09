@@ -1,0 +1,25 @@
+{{> html_header }}
+
+{{> navigation }}
+<div class="container">
+
+    {{#each repositories}}
+        <div class="repository">
+            <div class="repository-header">
+                <span class="fa fa-folder-open"></span>  <a href="/view?repo={{tree}}">{{ name }}</a>
+                <a href=""><span class="fa fa-rss rss-icon pull-right"></span></a>
+            </div>
+            <div class="repository-body">
+                {{#if description }}
+                    <p>{{ description }}</p>
+                {{else}}
+                    <p>There is no repository description file. Please, create one to remove this message.</p>
+                {{/if}}
+            </div>
+        </div>
+    {{/each}}
+
+    <hr />
+
+</div>
+{{> html_footer }}

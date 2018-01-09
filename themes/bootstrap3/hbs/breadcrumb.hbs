@@ -1,0 +1,15 @@
+
+{{#if breadCrumbPath}}
+<ol class="breadcrumb">
+    {{#each breadCrumbPath}}
+        <li><a href="/view?repo={{../repo}}&path={{this.path}}&tree={{ ../branch }}">{{this.text}}</a></li>
+    {{/each}}
+    <div class="pull-right">
+        <div class="btn-group download-buttons">
+            <button type="button" href="" class="btn btn-default btn-xs" title="Download '{{ branch }}' as a ZIP archive">ZIP</button>
+            <button type="button" href="" class="btn btn-default btn-xs" title="Download '{{ branch }}' as a TAR archive">TAR</button>
+            <a href=""><span class="fa fa-rss rss-icon"></span></a>
+        </div>
+    </div>
+</ol>
+{{/if}}

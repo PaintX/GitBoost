@@ -1,0 +1,57 @@
+{{> html_header }}
+
+{{> navigation }}
+<div class="container">
+
+{{> header }}
+{{> breadcrumb }}
+
+{{#if files }}
+    <table class="table tree">
+        <thead>
+            <tr>
+                <th width="80%">Name</th>
+                <th width="10%">Mode</th>
+                <th width="10%">Size</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each files}}
+                <tr>
+                    <td>
+                        {{#eq type "tree"}}
+                            <span class="fa fa-folder-open"></span> <a href="/view?repo={{../repo}}&path={{../repopath}}/{{ name }}&tree={{../branch }}">{{ name }}</a>
+                        {{/eq}}
+                        {{#eq type "folder"}}
+                            <span class="fa fa-folder-open"></span> <a href="">{{ name }}</a>
+                        {{/eq}}
+                        {{#eq type "symlink"}}
+                            <span class="fa fa-folder-open"></span> <a href="">{{ name }}</a>
+                        {{/eq}}
+                        {{#eq type "blob"}}
+                            <span class="fa fa-file"></span> <a href="">{{ name }}</a>
+                        {{/eq}}
+
+                    </td>
+                <td>{{ mode }}</td>
+                <td></td>
+            </tr>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+{{else}}
+    <p>This repository is empty.</p>
+{{/if}}
+
+{{#if readme }}
+    <div class="readme-view">
+        <div class="md-header">
+            <span class="meta">{{ readme.filename }}</span>
+        </div>
+        <div id="md-content">{{ readme.content }}</div>
+    </div>
+{{/if}}
+
+</div>
+{{> html_footer }}

@@ -1,0 +1,47 @@
+{{> html_header }}
+
+{{> navigation }}
+<div class="container">
+
+{{> header }}
+{{> breadcrumb }}
+
+    <table class="table stats">
+        <thead>
+            <tr>
+                <th width="30%"><span class="fa fa-file-text"></span> File extensions ({{length stats.extensions}})</th>
+                <th width="40%"><span class="fa fa-users"></span> Authors ({{length authors }})</th>
+                <th width="30%"><span class="fa fa-star"></span> Other</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>
+                    <ul>
+                    {{#each stats.extensions }}
+                        <li><strong>{{ name }}</strong>: {{ nb }} files</li>
+                    {{/each}}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                    {{#each authors }}
+                        <li><strong><a href="">{{user}}</a></strong> : {{commits}} commits</li>
+                    {{/each}}
+                    </ul>
+                </td>
+                <td>
+                    <p>
+                        <strong>Total files: </strong> {{stats.nbFiles}}
+                    </p>
+
+                    <p>
+                        <strong>Total bytes:</strong>  {{stats.totalSize}}
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table> 
+</div>
+{{> html_footer }}
