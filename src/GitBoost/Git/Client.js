@@ -465,6 +465,53 @@ function getdataForGraph(repos)
     return nodes;
 }
 
+function createBareRepos(repos)
+{
+    git.setOptions({cwd : repos.path});
+    git.createBareReposSync(repos.name);
+}
+
+function createNonBareRepos(repos)
+{
+    git.setOptions({cwd : repos.path});
+    git.createNonBareReposSync(repos.name);
+}
+
+function addFile(repos, file)
+{
+    git.setOptions({cwd : repos.path});
+    git.addFileSync(file);
+}
+
+function commit(repos , message )
+{
+    git.setOptions({cwd : repos.path});
+    git.commitSync(message);
+}
+
+function createBareFromNonBareRepos(repos)
+{
+    var deleteFolderRecursive = function(path) {
+        if( fs.existsSync(path) ) {
+            fs.readdirSync(path).forEach(function(file) {
+              var curPath = path + "/" + file;
+                if(fs.statSync(curPath).isDirectory()) { // recurse
+                    deleteFolderRecursive(curPath);
+                } else { // delete file
+                    fs.unlinkSync(curPath);
+                }
+            });
+            fs.rmdirSync(path);
+          }
+      };
+
+    git.setOptions({cwd : repos.path});
+    git.cloneToBare(repos.path);
+    deleteFolderRecursive(repos.path);
+    fs.renameSync(repos.path + ".git" , repos.path);
+}
+
+module.exports.createBareFromNonBareRepos = createBareFromNonBareRepos;
 module.exports.getdataForGraph = getdataForGraph;
 module.exports.getLogsForGraph = getLogsForGraph;
 module.exports.getBranchesWithHash = getBranchesWithHash;
@@ -480,3 +527,7 @@ module.exports.getHead = getHead;
 module.exports.getRepositories = getRepositories;
 module.exports.getRepositoryFromName = getRepositoryFromName;
 module.exports.recurseDirectory = recurseDirectory;
+module.exports.createBareRepos = createBareRepos;
+module.exports.createNonBareRepos = createNonBareRepos;
+module.exports.addFile = addFile;
+module.exports.commit = commit;

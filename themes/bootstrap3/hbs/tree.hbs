@@ -40,11 +40,8 @@
             {{/each}}
         </tbody>
     </table>
-{{else}}
-    <p>This repository is empty.</p>
-{{/if}}
 
-{{#if readme }}
+    {{#if readme }}
     <div class="readme-view">
         <div class="md-header">
             <span class="meta">{{ readme.filename }}</span>
@@ -53,5 +50,9 @@
     </div>
 {{/if}}
 
-</div>
+{{else}}
+    <p>This repository is empty.</p>
+{{/if}}
+
+
 {{> html_footer }}

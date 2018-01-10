@@ -1,0 +1,56 @@
+{{> html_header }}
+
+{{> navigation }}
+<div class="container">
+
+    {{#if msgSuccess}}
+        <div class="alert alert-success">
+            <strong>Ok! </strong> {{ msgSuccess }}
+        </div>
+    {{/if}}
+    {{#if msgError}}   
+        <div class="alert alert-danger">
+            <strong>Oops! </strong> {{ msgError }}
+        </div>
+    {{/if}}
+
+<div class="repository">
+    <div class="repository-header">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Create New Repository or Directory
+        </div>
+        <div class="repository-body">
+            <form method="POST">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Select Path :</label>
+                <select class="form-control" name="ReposPath">
+                    {{#if directoryList}}
+                        {{#each directoryList}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                    {{/if}}
+                </select>  
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Repository or Directory Name : </label>
+                <input type="text" class="form-control" name="ReposName" id="ReposName" placeholder="Repos or Dir name">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Select Repository or Directory : </label>
+                <div class="radio">
+                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="Repos" checked>
+                        Repository
+                </div>
+                <div class="radio">
+                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="Dir">
+                        Directory
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+            <button type="submit" class="btn btn-default"> Create </button>
+             </div>
+             </form>
+        </div>
+
+</div>
+ {{> html_footer }}

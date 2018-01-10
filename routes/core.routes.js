@@ -30,6 +30,11 @@ var routes =
         url : '/network',
         controller : 'NetworkController',
         view : 'network'
+    },
+    'create' : {
+        url : '/create',
+        controller : 'ReposController',
+        view : 'create'
     }
 }
 
