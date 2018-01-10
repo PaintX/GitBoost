@@ -427,6 +427,26 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
     getLogsForGraph : function()
     {
       return gitExecSync('log --all --date-order --pretty="%h|%p|%d"');
+    },
+    createBareReposSync : function(name)
+    {
+      return gitExecSync('init --bare');
+    },
+    createNonBareReposSync : function(name)
+    {
+      return gitExecSync('init');
+    },
+    addFileSync : function(file)
+    {
+      return gitExecSync('add ' + file);
+    },
+    commitSync : function(message)
+    {
+      return gitExecSync('commit -m "' + message +'"');
+    },
+    cloneToBare : function(path)
+    {
+      return gitExecSync('clone --bare "' +  path + '" "'+path+'.git"');
     }
 
   };
