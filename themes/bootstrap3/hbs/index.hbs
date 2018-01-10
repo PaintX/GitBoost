@@ -2,7 +2,7 @@
 
 {{> navigation }}
 <div class="container">
-
+{{#if repositories}}
     {{#each repositories}}
         <div class="repository">
             <div class="repository-header">
@@ -19,7 +19,9 @@
         </div>
     {{/each}}
 
-    <hr />
+{{else}}
+    <p>No repos found.</p>
+{{/if}}
 
-</div>
+
 {{> html_footer }}

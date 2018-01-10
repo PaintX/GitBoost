@@ -11,6 +11,8 @@ function _get (req, res, next , render)
     if ( req.query.tree == undefined )
     {
         req.query.tree = git.getHead(repository);
+        if ( req.query.tree == undefined)
+            req.query.tree = config.git.default_branch;
     }
     if ( req.query.path == undefined )
         req.query.path = "";
@@ -19,6 +21,9 @@ function _get (req, res, next , render)
 
     objRet.branch = req.query.tree;
     objRet.branches = git.getBranches(repository);
+    if ( objRet.branches.length == 0)
+        objRet.branches.push(objRet.branch);
+        
     objRet.tags = git.getTags(repository);
     objRet.readme = git.getReadMe(repository , req.query.tree);
     objRet.files = git.getTree(repository , req.query.tree);

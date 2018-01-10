@@ -222,8 +222,9 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
     getTreeListSync : function ( branchName )
     {
       let result = gitExecSync("ls-tree -l " + branchName );
-      //let req = new RegExp("/[\s]+/");
       let lines = [];
+      if ( result == undefined)
+        return lines;
       result.split('\n').map(function(line){
           if ( line.trim().length != 0)
           {
@@ -269,8 +270,12 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
 
       });
 
+      let logs = gitExecSync('log --pretty=format:"%H | %h | %an | %cd | %s | %D | %p ##"');
 
-      let tab = gitExecSync('log --pretty=format:"%H | %h | %an | %cd | %s | %D | %p ##"').split('##\n');
+      let tab = [];
+      
+      if ( logs != undefined)
+        tab = logs.split('##\n');
 
       let commitsList = [];
       tab.map(function(t)
@@ -368,6 +373,9 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
     {
       let result = gitExecSync("ls-tree -r -l " + branchName );
       let lines = [];
+      if ( result == undefined)
+        return lines;
+
       result.split('\n').map(function(line){
           if ( line.trim().length != 0)
           {
@@ -381,6 +389,8 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
     {
       let result = gitExecSync('log --pretty=format:"%an||%ae" ' + branchName );
       let lines = [];
+      if ( result == undefined)
+        return lines;
       result.split('\n').map(function(line){
           if ( line.trim().length != 0)
           {

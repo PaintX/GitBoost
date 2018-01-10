@@ -6,11 +6,7 @@
 {{> header }}
 {{> breadcrumb }}
 
-
-
-<div id="output" data-graph=''></div>
-
-<div id="gitGraphText"></div>
+<div id="gitGraphText">Repos has no commit</div>
 
 <script>
 $( document ).ready(function() {
@@ -22,15 +18,12 @@ $( document ).ready(function() {
         {
             lines += line + "<br>";
         });
-        $("#gitGraphText").html(lines);
-        $("#output").attr('data-graph', JSON.parse(data).graphData);
-        $("[data-graph]").commits({
-            orientation: "horizontal",
-        });
+        if ( lines.length != 0)
+            $("#gitGraphText").html(lines);
     });
 
 });
 </script>
 
-</div>
+
 {{> html_footer }}
