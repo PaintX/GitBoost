@@ -17,7 +17,7 @@ function getRepositories (paths)
 
         for ( let key in repositories)
         {
-            repositories[key].tree = repositories[key].tree.replace(p,"/");
+            repositories[key].tree = repositories[key].tree.replace(p,"");
             allRepositories.push(repositories[key]);
         }
         //allRepositories = Object.assign(allRepositories,repositories);

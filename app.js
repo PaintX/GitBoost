@@ -6,6 +6,7 @@ var session = require('express-session');
 var routes = require('./routes/core.routes');
 var config = require("./config");
 var helpers = require('handlebars-helpers')();
+var expressGit = require("express-git2");
 
 var app = express();
 
@@ -21,12 +22,11 @@ app.set('views', __dirname + '/themes/'+ config.app.theme+'/hbs');
 app.set('view engine', '.hbs');
 app.engine('.hbs', handlebars({ extname: '.hbs' , partialsDir: './themes/'+ config.app.theme+'/hbs' , helpers : helpers}));
 
-
+/*
 app.use(function (req, res, next)
 {
     next();
-});
-
+});*/
 
 
 /**
@@ -78,13 +78,34 @@ app.use(function (req, res, next) {
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error.hbs', {
-        message: err.message,
-        stack : err.stack,
-        error: {}
-    });
+    if ( req.originalUrl.startsWith("/git/") == false)
+    {
+        res.status(err.status || 500);
+        res.render('error.hbs', {
+            message: err.message,
+            stack : err.stack,
+            error: {}
+        });        
+    }
+    else
+        next();
 });
+
+
+app.use("/git", expressGit.serve(config.git.repositories[0], {
+	auto_init: false,
+	serve_static: true,
+	authorize: function (service, req, next) {
+		// Authorize a service
+		next();
+	}
+}));
+
+app.on('post-receive', function (repo, changes) {
+	// Do something after a push
+	next();
+});
+
 
 app.set('port', process.env.PORT || 1337);
 

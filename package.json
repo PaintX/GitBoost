@@ -1,6 +1,6 @@
 {
   "name": "gitboost",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "an elegant git repositorie browser",
   "main": "app.js",
   "directories": {
@@ -8,16 +8,17 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
-    "express": "^4.16.2",
     "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
+    "express-git2": "0.0.2",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
+    "git-interface": "^0.1.9",
     "handlebars-helpers": "^0.10.0",
     "lodash": "^4.17.4",
     "md5": "^2.2.1",
     "prettysize": "^1.1.0",
-    "simple-git": "^1.85.0",
-    "git-interface": "^0.1.9"
+    "simple-git": "^1.85.0"
   },
   "devDependencies": {},
   "scripts": {

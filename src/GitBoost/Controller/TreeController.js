@@ -6,6 +6,9 @@ function _get (req, res, next , render)
     let objRet = {};
     objRet.repo = req.query.repo;
 
+    if ( objRet.repo.startsWith("/"))
+    objRet.repo = objRet.repo.replace("/","");
+
     let repository = git.getRepositoryFromName(config.git.repositories, req.query.repo);
 
     if ( req.query.tree == undefined )
