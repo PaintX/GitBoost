@@ -1,5 +1,5 @@
 # GitBoost
-an elegant and modern git repository viewer coded in javascript for nodeJS
+an elegant and modern git Server coded in javascript for nodeJS
 
 ## Install
 
@@ -18,6 +18,11 @@ don't forget to modify the 'config.js' file with your configuration !
        repositories : [  
         "F:/_data_/"                //-- example for windows but work with unix to !
     ],                              //-- Path to your repositories
+```
+```
+    theme : "bootstrap3",           //-- set your theme ( only bootstrap3 for the moment)
+    defaultLogin : "admin",         //-- default login for push/pull
+    defaultPassword : "admin"       //-- default password for push/pull
 ```
 
 it's all , the installation is complete !

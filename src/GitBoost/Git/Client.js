@@ -17,7 +17,7 @@ function getRepositories (paths)
 
         for ( let key in repositories)
         {
-            repositories[key].tree = repositories[key].tree.replace(p,"/");
+            repositories[key].tree = repositories[key].tree.replace(p,"");
             allRepositories.push(repositories[key]);
         }
         //allRepositories = Object.assign(allRepositories,repositories);
@@ -92,12 +92,15 @@ function recurseDirectory ( p , toplevel )
 
 function getRepositoryFromName(paths , repo)
 {
+    if ( repo.startsWith("/") )
+        repo = repo.replace("/" , "");
+        
     let allRepositories = getRepositories(paths);
     let rep = undefined;
 
     allRepositories.map(function(r)
     {
-        if ( r.tree == repo )
+        if ( r.tree == ("/" + repo) ||  r.name == repo)
         {
             rep = r;
         }
@@ -188,7 +191,7 @@ function getTags(repos , branch )
 function getTree(repos , branch )
 {
     let files = [];
-    git.setOptions({cwd : repos.path});
+    git.setOptions({cwd : repos.path });
     let treeLines = git.getTreeListSync(branch);
     let tree = [];
 
@@ -207,10 +210,15 @@ function getTree(repos , branch )
 
 
         obj.type = infos[1];
-        obj.name = infos[4];
         obj.size = infos[3];
         obj.mode = infos[0];
         obj.hash = infos[2];
+        obj.name = line.replace('\t' , " ").trim();/*.replace(obj.type , "").replace(obj.size , "").replace(obj.mode , "").replace(obj.hash , "").trim();*/
+        obj.name = obj.name.replace(obj.mode , " ").trim();    
+        obj.name = obj.name.replace(obj.type , " ").trim();
+        obj.name = obj.name.replace(obj.hash , " ").trim();
+        obj.name = obj.name.replace(obj.size , " ").trim();
+        
         obj.path = repos.path + "/" + obj.name;
 
         files.push(obj);
@@ -239,10 +247,10 @@ function getReadMe(repos , branch)
     return objRet;
 }
 
-function getCommits(repos)
+function getCommits(repos , branch)
 {
     git.setOptions({cwd : repos.path});
-    return git.getCommitsListSync();
+    return git.getCommitsListSync(branch);
 }
 
 function getStats(repos , branch)
@@ -264,10 +272,17 @@ function getStats(repos , branch)
         });
 
         obj.type = infos[1];
-        obj.name = infos[4];
+        //obj.name = infos[4];
         obj.size = infos[3];
         obj.mode = infos[0];
         obj.hash = infos[2];
+
+        for ( let i = 4 ; i <infos.length ; i++ )
+        {
+            obj.name += infos[i];
+            if ( i < infos.length )
+            obj.name += " ";
+        }
         if ( obj.name.lastIndexOf('.') != -1 )
             obj.extension = obj.name.substring(obj.name.lastIndexOf('.'), obj.name.length);
         obj.path = repos.path + "/" + obj.name;

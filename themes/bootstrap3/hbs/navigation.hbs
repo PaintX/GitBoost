@@ -11,7 +11,12 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/create">Create new Repo</a></li>
+                {{#if user }}
+                    <li><a href="/create">Create new Repo</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                {{else}}
+                    <li><a href="/login">Login</a></li>
+                {{/if}}
                 <!--<li><a href="/refresh.html">Refresh</a></li>-->
                 <li><a href="https://github.com/PaintX/GitBoost/issues/new">Report bug</a></li>
                 <li><a href="https://github.com/PaintX/GitBoost/wiki">Help</a></li>
