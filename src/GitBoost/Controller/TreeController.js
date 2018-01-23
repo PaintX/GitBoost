@@ -20,14 +20,14 @@ function _get (req, res, next , render)
     if ( req.query.path == undefined )
         req.query.path = "";
 
-    repository.path = repository.path + req.query.path;
+    
 
     objRet.branch = req.query.tree;
     objRet.branches = git.getBranches(repository);
     if ( objRet.branches.length == 0)
         objRet.branches.push(objRet.branch);
         
-    objRet.tags = git.getTags(repository);
+    objRet.tags = git.getTags(repository);repository.path = repository.path + req.query.path;
     objRet.readme = git.getReadMe(repository , req.query.tree);
     objRet.files = git.getTree(repository , req.query.tree);
     objRet.repopath = req.query.path;

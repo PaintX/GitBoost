@@ -1,5 +1,5 @@
 # GitBoost
-an elegant and modern git repository viewer coded in javascript for nodeJS
+an elegant and modern git Server coded in javascript for nodeJS
 
 ## Install
 

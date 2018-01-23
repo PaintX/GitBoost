@@ -92,12 +92,15 @@ function recurseDirectory ( p , toplevel )
 
 function getRepositoryFromName(paths , repo)
 {
+    if ( repo.startsWith("/") )
+        repo = repo.replace("/" , "");
+        
     let allRepositories = getRepositories(paths);
     let rep = undefined;
 
     allRepositories.map(function(r)
     {
-        if ( r.tree == repo )
+        if ( r.name == repo )
         {
             rep = r;
         }
@@ -188,7 +191,7 @@ function getTags(repos , branch )
 function getTree(repos , branch )
 {
     let files = [];
-    git.setOptions({cwd : repos.path});
+    git.setOptions({cwd : repos.path });
     let treeLines = git.getTreeListSync(branch);
     let tree = [];
 
@@ -207,10 +210,15 @@ function getTree(repos , branch )
 
 
         obj.type = infos[1];
-        obj.name = infos[4];
         obj.size = infos[3];
         obj.mode = infos[0];
         obj.hash = infos[2];
+        obj.name = line.replace('\t' , " ").trim();/*.replace(obj.type , "").replace(obj.size , "").replace(obj.mode , "").replace(obj.hash , "").trim();*/
+        obj.name = obj.name.replace(obj.mode , " ").trim();    
+        obj.name = obj.name.replace(obj.type , " ").trim();
+        obj.name = obj.name.replace(obj.hash , " ").trim();
+        obj.name = obj.name.replace(obj.size , " ").trim();
+        
         obj.path = repos.path + "/" + obj.name;
 
         files.push(obj);

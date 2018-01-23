@@ -7,8 +7,11 @@ var routes = require('./routes/core.routes');
 var config = require("./config");
 var helpers = require('handlebars-helpers')();
 var expressGit = require("express-git2");
+var db = require('./src/GitBoost/Sqllite/db');
 
 var app = express();
+
+db.init();
 
 app.use(session({ secret: 'this is my appppppppp' }));
 app.use(bodyParser.json());

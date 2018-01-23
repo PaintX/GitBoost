@@ -74,7 +74,8 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
   };
 
   module.exports = {
-    setOptions: function(opt) {
+    setOptions: function(opt) 
+    {
       return _.merge(options, opt);
     },
     clone: function(repo, dest, callback) {
