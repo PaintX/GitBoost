@@ -4,6 +4,7 @@ var config = require("../../../config");
 function _get (req, res, next , render)
 {
     let objRet = {};
+    objRet.domain = req.headers.host;
     objRet.repo = req.query.repo;
 
     if ( objRet.repo.startsWith("/"))
@@ -19,8 +20,6 @@ function _get (req, res, next , render)
     }
     if ( req.query.path == undefined )
         req.query.path = "";
-
-    
 
     objRet.branch = req.query.branch;
     objRet.branches = git.getBranches(repository);
