@@ -11,25 +11,25 @@ function _get (req, res, next , render)
 
     let repository = git.getRepositoryFromName(config.git.repositories, req.query.repo);
 
-    if ( req.query.tree == undefined )
+    if ( req.query.branch == undefined )
     {
-        req.query.tree = git.getHead(repository);
-        if ( req.query.tree == undefined)
-            req.query.tree = config.git.default_branch;
+        req.query.branch = git.getHead(repository);
+        if ( req.query.branch == undefined)
+            req.query.branch = config.git.default_branch;
     }
     if ( req.query.path == undefined )
         req.query.path = "";
 
     
 
-    objRet.branch = req.query.tree;
+    objRet.branch = req.query.branch;
     objRet.branches = git.getBranches(repository);
     if ( objRet.branches.length == 0)
         objRet.branches.push(objRet.branch);
         
     objRet.tags = git.getTags(repository);repository.path = repository.path + req.query.path;
-    objRet.readme = git.getReadMe(repository , req.query.tree);
-    objRet.files = git.getTree(repository , req.query.tree);
+    objRet.readme = git.getReadMe(repository , req.query.branch);
+    objRet.files = git.getTree(repository , req.query.branch);
     objRet.repopath = req.query.path;
 
 

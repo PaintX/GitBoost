@@ -3,7 +3,7 @@
     <ul class="dropdown-menu">
         <li class="dropdown-header">Branches</li>
         {{#each branches}}
-            <li><a href="/view?repo={{../repo}}&path={{../repopath}}&tree={{ this }}">{{ this }}</a></li>
+            <li><a href="/view?repo={{../repo}}&path={{../repopath}}&branch={{ this }}">{{ this }}</a></li>
         {{/each}} 
         {{#if tags }}
             <li class="dropdown-header">Tags</li>

@@ -100,7 +100,7 @@ function getRepositoryFromName(paths , repo)
 
     allRepositories.map(function(r)
     {
-        if ( r.name == repo )
+        if ( r.tree == ("/" + repo) ||  r.name == repo)
         {
             rep = r;
         }
@@ -247,10 +247,10 @@ function getReadMe(repos , branch)
     return objRet;
 }
 
-function getCommits(repos)
+function getCommits(repos , branch)
 {
     git.setOptions({cwd : repos.path});
-    return git.getCommitsListSync();
+    return git.getCommitsListSync(branch);
 }
 
 function getStats(repos , branch)
@@ -272,10 +272,17 @@ function getStats(repos , branch)
         });
 
         obj.type = infos[1];
-        obj.name = infos[4];
+        //obj.name = infos[4];
         obj.size = infos[3];
         obj.mode = infos[0];
         obj.hash = infos[2];
+
+        for ( let i = 4 ; i <infos.length ; i++ )
+        {
+            obj.name += infos[i];
+            if ( i < infos.length )
+            obj.name += " ";
+        }
         if ( obj.name.lastIndexOf('.') != -1 )
             obj.extension = obj.name.substring(obj.name.lastIndexOf('.'), obj.name.length);
         obj.path = repos.path + "/" + obj.name;
