@@ -10,4 +10,6 @@ module.exports.app = {
     debug : false,
     cache : false,
     theme : "bootstrap3",
+    defaultLogin : "admin",
+    defaultPassword : "admin"
 };

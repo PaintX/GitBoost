@@ -19,6 +19,11 @@ don't forget to modify the 'config.js' file with your configuration !
         "F:/_data_/"                //-- example for windows but work with unix to !
     ],                              //-- Path to your repositories
 ```
+```
+    theme : "bootstrap3",           //-- set your theme ( only bootstrap3 for the moment)
+    defaultLogin : "admin",         //-- default login for push/pull
+    defaultPassword : "admin"       //-- default password for push/pull
+```
 
 it's all , the installation is complete !
 

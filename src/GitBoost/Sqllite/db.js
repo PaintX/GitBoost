@@ -1,6 +1,7 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('database.db');
 var passwordC = require('../Password/password');
+var config = require('../../../config');
 var apiKey = require('../ApiKey/apikey');
 
 function _init()
@@ -28,15 +29,15 @@ function _init()
         db.all("SELECT id AS id FROM user ", function (err, rows) {
             if (rows.length <= 0)
             {
-                passwordC.cryptPassword("admin", function (err, key)
+                passwordC.cryptPassword(config.app.defaultPassword, function (err, key)
                 {
                     if (err) {
                         console.log(err);
                         return;
                     }
                     
-                    db.run("INSERT OR REPLACE INTO user ( name , member_group_id , email , joined , language ,  password ) VALUES (?,?,?,?,?,?)", ["admin", -1, "", new Date().getTime(), "fr", key]);
-                    _connect("admin","admin",function(user)
+                    db.run("INSERT OR REPLACE INTO user ( name , member_group_id , email , joined , language ,  password ) VALUES (?,?,?,?,?,?)", [config.app.defaultLogin, -1, "", new Date().getTime(), "fr", key]);
+                    _connect(config.app.defaultLogin,config.app.defaultPassword,function(user)
                     {
                         db.run("INSERT OR REPLACE INTO apiTable (  key , user_id  ) VALUES (?,?)", [apiKey.generate(),user.id ]);
                     });
