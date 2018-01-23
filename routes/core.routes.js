@@ -15,6 +15,16 @@ var routes =
         controller : 'TreeController',
         view : 'tree'
     },
+    'login': {
+        url: '/login',
+        controller: 'UserController',
+        view: 'login'
+    },
+    'logout': {
+        url: '/logout',
+        controller: 'UserController',
+        view: 'login'
+    },
     'commits' : {
         url : '/commits',
         controller : 'CommitsController',
