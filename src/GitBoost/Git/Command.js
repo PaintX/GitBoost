@@ -246,9 +246,9 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
     {
         return gitExecSync("cat-file -p " + hash);
     },
-    getCommitsListSync : function ( )
+    getCommitsListSync : function ( branch )
     {
-      let result = gitExecSync("branch --v");
+     /* let result = gitExecSync("branch --v");
 
       let req = new RegExp(/\*\s+/);
       let branchesTab = [];
@@ -270,8 +270,8 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
         branches.push({ nom : tabBr[0] , parent : tabBr[1] });
 
       });
-
-      let logs = gitExecSync('log --pretty=format:"%H | %h | %an | %cd | %s | %D | %p ##"');
+*/
+      let logs = gitExecSync('log --pretty=format:"%H | %h | %an | %cd | %s | %D | %p ##" ' + branch);
 
       let tab = [];
       

@@ -8,14 +8,14 @@ function _get (req, res, next , render)
 
     let repository = git.getRepositoryFromName(config.git.repositories, req.query.repo);
     
-    if ( req.query.tree == undefined )
+    if ( req.query.branch == undefined )
     {
-        req.query.tree = git.getHead(repository);
-        if ( req.query.tree == undefined)
-            req.query.tree = config.git.default_branch;
+        req.query.branch = git.getHead(repository);
+        if ( req.query.branch == undefined)
+            req.query.branch = config.git.default_branch;
     }
 
-    objRet.branch = req.query.tree;
+    objRet.branch = req.query.branch;
     objRet.branches = git.getBranches(repository);
     if ( objRet.branches.length == 0)
         objRet.branches.push(objRet.branch);

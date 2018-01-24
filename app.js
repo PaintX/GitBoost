@@ -95,11 +95,33 @@ app.use(function (err, req, res, next) {
 });
 
 
-app.use("/git", expressGit.serve(config.git.repositories[0], {
+/*app.use("/git", expressGit.serve(config.git.repositories[0], {
 	auto_init: false,
 	serve_static: true,
 	authorize: function (service, req, next) {
-		// Authorize a service
+        let userName = req.baseUrl.replace("/git/","");
+
+	    next({status : 403});
+	}
+}));*/
+
+app.param('userApi', function(req, res, next, id){
+    
+    db.apiExist(id,function()
+    {
+        next();
+    },function()
+    {
+        next({status : 403});
+    });
+        
+});
+
+app.use("/git/:userApi", expressGit.serve(config.git.repositories[0], {
+	auto_init: false,
+	serve_static: true,
+	authorize: function (service, req, next) {
+     
 		next();
 	}
 }));
