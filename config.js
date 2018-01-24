@@ -7,9 +7,11 @@ module.exports.git={
 };
 
 module.exports.app = {
-    debug : false,
-    cache : false,
-    theme : "bootstrap3",
-    defaultLogin : "admin",
-    defaultPassword : "admin"
+    debug : true,                  //-- display few information
+    cache : false,                  //-- not active at this moment
+    tempDir : "D:/_DEV_/DEV_WEB/GitBoost/tmp",      //-- temp directory for download archive
+    port : 1337,                    //-- http port
+    theme : "bootstrap3",           //-- default theme ( only bootstrap3 for moment )
+    defaultLogin : "admin",         //-- default login for fresh install 
+    defaultPassword : "admin"       //-- default password for fresh install
 };

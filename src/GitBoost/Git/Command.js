@@ -448,6 +448,10 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
     cloneToBare : function(path)
     {
       return gitExecSync('clone --bare "' +  path + '" "'+path+'.git"');
+    },
+    createArchiveSync : function( branch , output , format)
+    {
+      return gitExecSync('archive --format='+format+' --output="' + output + '" ' + branch);
     }
 
   };

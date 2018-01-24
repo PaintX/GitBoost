@@ -1,14 +1,34 @@
 {{#if breadCrumbPath}}
 <ol class="breadcrumb">
     {{#each breadCrumbPath}}
-        <li><a href="/view?repo={{../repo}}&path={{this.path}}&tree={{ ../branch }}">{{this.text}}</a></li>
+        <li><a href="/view?repo={{../repo}}&path={{this.path}}&branch={{ ../branch }}">{{this.text}}</a></li>
     {{/each}}
     <div class="pull-right">
         <div class="btn-group download-buttons">
-            <button type="button" href="" class="btn btn-default btn-xs" title="Download '{{ branch }}' as a ZIP archive">ZIP</button>
-            <button type="button" href="" class="btn btn-default btn-xs" title="Download '{{ branch }}' as a TAR archive">TAR</button>
+            <button id="downloadAsZip" type="button" class="btn btn-default btn-xs" title="Download '{{ branch }}' as a ZIP archive">ZIP</button>
+            <button id="downloadAsTar" type="button" href="" class="btn btn-default btn-xs" title="Download '{{ branch }}' as a TAR archive">TAR</button>
             <a href=""><span class="fa fa-rss rss-icon"></span></a>
         </div>
     </div>
 </ol>
+
+<script>
+
+    // with this solution, the browser handles the download link naturally (tested in chrome and firefox)
+    $(document).ready(function () {
+
+        var url = "";
+        $("#downloadAsZip").on('click', function () {
+            url = "/download?repo={{ repo }}&branch={{  branch }}&format=";
+            url += "zip";
+            window.open(url , '_blank');
+        });
+        $("#downloadAsTar").on('click', function () {
+            url = "/download?repo={{ repo }}&branch={{  branch }}&format=";
+            url += "tar";
+            window.open(url , '_blank');
+        });
+    });
+
+</script>
 {{/if}}

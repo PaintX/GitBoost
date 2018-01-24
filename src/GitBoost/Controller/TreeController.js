@@ -8,7 +8,7 @@ function _get (req, res, next , render)
     objRet.repo = req.query.repo;
 
     if ( objRet.repo.startsWith("/"))
-    objRet.repo = objRet.repo.replace("/","");
+        objRet.repo = objRet.repo.replace("/","");
 
     let repository = git.getRepositoryFromName(config.git.repositories, req.query.repo);
 
