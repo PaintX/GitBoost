@@ -534,6 +534,18 @@ function createArchive(repos , branch , output , format)
     git.createArchiveSync(branch,output,format);
 }
 
+function getRepoDescription(repos)
+{
+    let file = '';
+    if ( fs.existsSync(repos.path + '/.git/description') )
+        file = fs.readFileSync(repos.path + '/.git/description',"UTF-8");
+    else if ( fs.existsSync(repos.path + '/description') )
+        file = fs.readFileSync(repos.path + '/description',"UTF-8");
+
+    return file;
+}
+
+module.exports.getRepoDescription = getRepoDescription;
 module.exports.createArchive = createArchive;
 module.exports.createBareFromNonBareRepos = createBareFromNonBareRepos;
 module.exports.getdataForGraph = getdataForGraph;

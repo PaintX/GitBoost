@@ -3,4 +3,5 @@
     <li {{#if commitMenuActive}}class="active"{{/if}}><a href="/commits?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Commits</a></li>
     <li {{#if statMenuActive}}class="active"{{/if}}><a href="/stats?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Stats</a></li>
   	<li {{#if networkMenuActive}}class="active"{{/if}}><a href="/network?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Network</a></li>
+    {{#if user}}<li {{#if editMenuActive}}class="active"{{/if}}><a href="/edit?repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}">Edit</a></li>{{/if}}
 </ul>
