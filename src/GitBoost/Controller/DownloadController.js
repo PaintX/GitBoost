@@ -30,12 +30,8 @@ function _get (req, res, next , render)
     git.createArchive(repository ,req.query.branch ,tempDir + tempApiKey +'.'+req.query.format ,req.query.format)
 
     res.download(tempDir+ tempApiKey +'.'+req.query.format, repository.name + "_" + req.query.branch + "." +  req.query.format ,function(err){
-        if (err){
-          console.log(err);
-        } else {
-            fs.unlink(tempDir + tempApiKey +'.'+req.query.format);
-        }
-      });
+        fs.unlink(tempDir + tempApiKey +'.'+req.query.format);
+    });
 }
 
 module.exports.get = _get;
