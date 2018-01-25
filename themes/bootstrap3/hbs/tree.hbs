@@ -20,7 +20,7 @@
                 <tr>
                     <td>
                         {{#eq type "tree"}}
-                            <span class="fa fa-folder-open"></span> <a href="/view?repo={{../repo}}&path={{../repopath}}/{{ name }}&tree={{../branch }}">{{ name }}</a>
+                            <span class="fa fa-folder-open"></span> <a href="/view?repo={{../repo}}&path={{../repopath}}/{{ name }}&branch={{../branch }}">{{ name }}</a>
                         {{/eq}}
                         {{#eq type "folder"}}
                             <span class="fa fa-folder-open"></span> <a href="">{{ name }}</a>
@@ -44,7 +44,7 @@
     {{#if readme }}
     <div class="readme-view">
         <div class="md-header">
-            <span class="meta">{{ readme.filename }}</span>
+            <i class="fa fa-file-text" aria-hidden="true"></i>  <span class="meta">{{ readme.filename }}</span>
         </div>
         <div id="md-content">{{ readme.content }}</div>
     </div>
