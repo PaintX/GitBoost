@@ -1,7 +1,7 @@
 # GitBoost
 an elegant and modern git Server coded in javascript for nodeJS
 
-## Install
+## Install From Git / Zip or Tar
 
 download a release and extract it.
 
@@ -10,7 +10,23 @@ in terminal, just write
    npm install
 ```
 
-don't forget to modify the 'config.js' file with your configuration !
+## Install From npm
+
+create a directory and in terminal, write
+```
+   npm install gitboost
+```
+
+then don't forget to create a app.js file in the directory with
+```
+   var gitboost = require("gitboost");
+```
+![GitHub Logo](./doc/BvSsh_2018-01-25_14-32-39.png)
+
+## Configure the App
+
+Modify the 'config.js' file with your configuration !
+the file it's in "node_modules/gitboost" if you have a npm installation
 
 ```
    client : '/usr/bin/git' ,       //-- Your git executable path
@@ -32,15 +48,12 @@ it's all , the installation is complete !
 
 in terminal, just write
 ```
-   npm start
+   node app.js
 ```
 
 this start the application and type http://localhost:1337 in your favorite navigator !
 
-for change this port, just set env PORT to your port number and start the application with 
-```
-   npm start
-```
+for change this port, just set env PORT to your port number and restart the application or configure it in config.js
 
 ## Screenshot
 
