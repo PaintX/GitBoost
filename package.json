@@ -1,6 +1,6 @@
 {
   "name": "gitboost",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "an elegant git repositorie browser",
   "main": "app.js",
   "directories": {
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PaintX/GitBoost.git"
+    "url": "git+https://github.com/remyar/GitBoost.git"
   },
   "keywords": [
     "git",
@@ -38,7 +38,7 @@
   "author": "RemyAr",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/PaintX/GitBoost/issues"
+    "url": "https://github.com/remyar/GitBoost/issues"
   },
-  "homepage": "https://github.com/PaintX/GitBoost#readme"
+  "homepage": "https://github.com/remyar/GitBoost#readme"
 }

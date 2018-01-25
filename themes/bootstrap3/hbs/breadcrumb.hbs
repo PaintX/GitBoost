@@ -1,14 +1,77 @@
 {{#if breadCrumbPath}}
-<ol class="breadcrumb">
-    {{#each breadCrumbPath}}
-        <li><a href="/view?repo={{../repo}}&path={{this.path}}&tree={{ ../branch }}">{{this.text}}</a></li>
-    {{/each}}
-    <div class="pull-right">
-        <div class="btn-group download-buttons">
-            <button type="button" href="" class="btn btn-default btn-xs" title="Download '{{ branch }}' as a ZIP archive">ZIP</button>
-            <button type="button" href="" class="btn btn-default btn-xs" title="Download '{{ branch }}' as a TAR archive">TAR</button>
-            <a href=""><span class="fa fa-rss rss-icon"></span></a>
+    <ol class="breadcrumb">
+        {{#each breadCrumbPath}}
+            <li><a href="/view?repo={{../repo}}&path={{this.path}}&branch={{ ../branch }}">{{this.text}}</a></li>
+        {{/each}}
+        {{#if user }}
+        <div class="pull-right">
+            <div class="btn-group download-buttons">
+                <button id="popoverCloneButton" type="button" class="btn btn-success btn-xs" data-toggle="popover" data-trigger="manual" data-placement="bottom" title="" 
+                data-content=   'Use Git using the web URL
+                        <div class="input-group input-group-sm" style="padding-top:8px">
+                                    <input type="text" class="form-control" value="http://{{domain}}/git/{{user.api}}/{{repo}}.git">
+                                    <span class="input-group-addon"><i class="fa fa-cloud-download" aria-hidden="true"></i></span>
+                                </div>
+                                <div style="padding-top:8px">
+                                Or click directly :
+                                </div>
+                                <div class="row" style="padding-top:8px ;margin-left:0px !important;margin-right:0px !important">
+                                    <a href="smartgit://cloneRepo/http://{{domain}}/git/{{user.api}}/{{repo}}.git" type="button"  class="col-md-4 btn btn-primary btn-xs" style="border-radius:0px">
+                                        <div>SmartGit</div>
+                                    </a>
+                                    <a href="sourcetree://cloneRepo/http://{{domain}}/git/{{user.api}}/{{repo}}.git" type="button" class="col-md-4 btn btn-primary btn-xs" style="border-radius:0px">
+                                        <div>SourceTree</div>
+                                    </a>
+                                    <a href="github-windows://cloneRepo/http://{{domain}}/git/{{user.api}}/{{repo}}.git" type="button" class="col-md-4 btn btn-primary btn-xs" style="border-radius:0px">
+                                        <div>Github</div>
+                                    </a>
+                                </div> 
+                                <div style="padding-top:8px">
+                                Or Download as :
+                                </div>
+                                <div class="row" style="padding-top:8px ;margin-left:0px !important;margin-right:0px !important">
+                                    <div onclick="downloadAs(0)" class="col-md-6 btn btn-info btn-xs" style="border-radius:0px">
+                                        <div >Zip</div>
+                                    </div>
+                                    <div onclick="downloadAs(1)" class="col-md-6 btn btn-info btn-xs" style="border-radius:0px">
+                                        <div>Tar</div>
+                                    </div>
+                                </div> '
+                data-original-title="Clone or Download">Clone or Download <i class="fa fa-caret-down" aria-hidden="true"></i></button>
+            </div>
+            <div class="btn-group download-buttons">
+                   <a href=""><span class="fa fa-rss fa-2 rss-icon"></span></a>
+            </div> 
         </div>
-    </div>
-</ol>
+        {{/if}}
+    </ol>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('body').on('click', function (e) {
+                $('[data-toggle=popover]').each(function () {
+                    // hide any open popovers when the anywhere else in the body is clicked
+                    if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                        $(this).popover('hide');
+                    }
+                });
+            });
+
+            $('[data-toggle="popover"]').popover({ html : true , container: 'body'}).click(function()
+            {
+                $(this).popover("show");
+            });
+
+        });
+
+        function downloadAs(format)
+        {
+            var url = "/download?repo={{ repo }}&branch={{  branch }}&format=";
+            if ( format == 0)
+                url += "zip";
+            else
+                url += "tar";
+            window.open(url , '_self');
+        }
+    </script>
 {{/if}}

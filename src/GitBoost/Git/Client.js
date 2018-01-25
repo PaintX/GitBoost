@@ -1,7 +1,7 @@
 var fs = require('fs');
 var config = require("../../../config");
 var git = require('./Command');
-var pretty = require('prettysize')
+var pretty = require('prettysize');
 var md5 = require('md5');
 
 var repositories = {};
@@ -220,6 +220,8 @@ function getTree(repos , branch )
         obj.name = obj.name.replace(obj.size , " ").trim();
         
         obj.path = repos.path + "/" + obj.name;
+
+        obj.size = pretty(parseInt(obj.size));
 
         files.push(obj);
     });
@@ -526,6 +528,13 @@ function createBareFromNonBareRepos(repos)
     fs.renameSync(repos.path + ".git" , repos.path);
 }
 
+function createArchive(repos , branch , output , format)
+{
+    git.setOptions({cwd : repos.path});
+    git.createArchiveSync(branch,output,format);
+}
+
+module.exports.createArchive = createArchive;
 module.exports.createBareFromNonBareRepos = createBareFromNonBareRepos;
 module.exports.getdataForGraph = getdataForGraph;
 module.exports.getLogsForGraph = getLogsForGraph;

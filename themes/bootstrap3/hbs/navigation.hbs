@@ -18,8 +18,10 @@
                     <li><a href="/login">Login</a></li>
                 {{/if}}
                 <!--<li><a href="/refresh.html">Refresh</a></li>-->
-                <li><a href="https://github.com/PaintX/GitBoost/issues/new">Report bug</a></li>
-                <li><a href="https://github.com/PaintX/GitBoost/wiki">Help</a></li>
+                {{#if debug}}
+                    <li><a href="https://github.com/remyar/GitBoost/issues/new">Report bug</a></li>
+                    <li><a href="https://github.com/remyar/GitBoost/wiki">Help</a></li>
+                {{/if}}
             </ul>
         </div><!--/.nav-collapse -->
     </div>

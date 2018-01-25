@@ -20,6 +20,7 @@ don't forget to modify the 'config.js' file with your configuration !
     ],                              //-- Path to your repositories
 ```
 ```
+    tempDir : "F:/tmp/",      //-- temp directory for download archive
     theme : "bootstrap3",           //-- set your theme ( only bootstrap3 for the moment)
     defaultLogin : "admin",         //-- default login for push/pull
     defaultPassword : "admin"       //-- default password for push/pull

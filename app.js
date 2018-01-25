@@ -25,13 +25,6 @@ app.set('views', __dirname + '/themes/'+ config.app.theme+'/hbs');
 app.set('view engine', '.hbs');
 app.engine('.hbs', handlebars({ extname: '.hbs' , partialsDir: './themes/'+ config.app.theme+'/hbs' , helpers : helpers}));
 
-/*
-app.use(function (req, res, next)
-{
-    next();
-});*/
-
-
 /**
  * Load all routes in core.routes.
  */
@@ -58,7 +51,7 @@ for (var key in routes) {
                 sessionData = Object.assign(sessionData, req.objRet);
                 sessionData = Object.assign(sessionData, { 'user': req.session.user });
 
-                if (app.get('port')  != 3000 )
+                if ( config.app.debug == true)
                     sessionData = Object.assign(sessionData, { 'debug': true });
 
                 res.render(path[req.route.path].render, sessionData);
@@ -94,17 +87,6 @@ app.use(function (err, req, res, next) {
         next();
 });
 
-
-/*app.use("/git", expressGit.serve(config.git.repositories[0], {
-	auto_init: false,
-	serve_static: true,
-	authorize: function (service, req, next) {
-        let userName = req.baseUrl.replace("/git/","");
-
-	    next({status : 403});
-	}
-}));*/
-
 app.param('userApi', function(req, res, next, id){
     
     db.apiExist(id,function()
@@ -132,7 +114,7 @@ app.on('post-receive', function (repo, changes) {
 });
 
 
-app.set('port', process.env.PORT || 1337);
+app.set('port', process.env.PORT || config.app.port);
 
 var server = app.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + server.address().port);
