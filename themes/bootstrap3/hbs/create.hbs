@@ -34,7 +34,7 @@
                 <label for="exampleInputEmail1">Repository or Directory Name : </label>
                 <input type="text" class="form-control" name="ReposName" id="ReposName" placeholder="Repos or Dir name">
             </div>
-            <div class="form-group">
+            <div class="form-group" onclick="_displayReposConfig()">
                 <label for="exampleInputEmail1">Select Repository or Directory : </label>
                 <div class="radio">
                         <input type="radio" name="optionsRadios" id="optionsRadios1" value="Repos" checked>
@@ -45,12 +45,29 @@
                         Directory
                 </div>
             </div>
+            <div class="form-group" id="repoConfig" style="display:none">
+                <label for="exampleInputEmail1">Select Private or Public : </label>
+                <div class="radio">
+                        <input type="radio" name="optionsRadio2" id="optionsRadios2" value="Public" checked>
+                        Public
+                </div>
+                <div class="radio">
+                        <input type="radio" name="optionsRadio2" id="optionsRadios2" value="Private">
+                        Private
+                </div>
+            </div>
             <br>
             <div class="form-group">
             <button type="submit" class="btn btn-default"> Create </button>
              </div>
              </form>
         </div>
+<script>
+    function _displayReposConfig()
+    {
+        //$("#repoConfig").toggle();
+    }
 
+</script>
 </div>
  {{> html_footer }}

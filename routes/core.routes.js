@@ -49,6 +49,11 @@ var routes =
     'download' : {
         url : '/download',
         controller : 'DownloadController',
+    },
+    'download' : {
+        url : '/edit',
+        controller : 'ReposController',
+        view : 'edit'
     }
 }
 

@@ -1,0 +1,29 @@
+{{> html_header }}
+
+{{> navigation }}
+<div class="container">
+
+{{> header }}
+{{> breadcrumb }}
+
+    {{#if msgSuccess}}
+        <div class="alert alert-success">
+            <strong>Ok! </strong> {{ msgSuccess }}
+        </div>
+    {{/if}}
+    {{#if msgError}}   
+        <div class="alert alert-danger">
+            <strong>Oops! </strong> {{ msgError }}
+        </div>
+    {{/if}}
+
+<div class="repository">
+    <div class="repository-header">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit the repos : {{ repo }}
+    </div>
+    <div class="repository-body">
+        {{repository.description}}
+    </div>
+</div>
+
+{{> html_footer }}

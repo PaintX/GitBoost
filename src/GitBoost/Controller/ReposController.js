@@ -47,6 +47,9 @@ function _get (req, res, next , render)
     let objRet = {};
     directoryList = [];
 
+    objRet.domain = req.headers.host;
+    objRet.repo = req.query.repo;
+
     config.git.repositories.map(function(p)
     {
          recurseDirectory(p);
@@ -54,7 +57,38 @@ function _get (req, res, next , render)
 
     objRet.directoryList = directoryList;
 
+    if ( req.path != "/create")
+    {
+        //-- edit
+        if ( objRet.repo.startsWith("/"))
+            objRet.repo = objRet.repo.replace("/","");
 
+        objRet.repopath = req.query.path;
+
+        let repository = git.getRepositoryFromName(config.git.repositories, req.query.repo);
+
+        objRet.branch = req.query.branch;
+        objRet.branches = git.getBranches(repository);
+        if ( objRet.branches.length == 0)
+            objRet.branches.push(objRet.branch);
+            
+        objRet.tags = git.getTags(repository);
+
+
+        objRet.repository = repository;
+
+        //objRet.repo.description = git.getRepoDescription(repository);
+
+
+
+
+
+
+
+
+
+        objRet.editMenuActive = true;
+    }
     return objRet;
 }
 
@@ -100,10 +134,20 @@ function _post (req, res, next)
 
     if ( req.body.optionsRadios != "Dir" && objRet.msgError == undefined)
     {
-        //-- création d'un repos
-        
         repos.name = req.body.ReposName;
         repos.path = directoryPath;
+        
+        //-- création d'un repos
+        if ( req.body.optionsRadio2 == "Public")
+        {
+            //-- public
+
+        }
+        else
+        {
+            //-- privé
+        }
+
         git.createNonBareRepos(repos);
 
         let isBare = fs.existsSync(directoryPath + '/HEAD' );

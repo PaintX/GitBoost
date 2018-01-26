@@ -5,6 +5,7 @@ var handlebars = require("express-handlebars");
 var session = require('express-session');
 var routes = require('./routes/core.routes');
 var config = require("./config");
+var acl = require("./src/GitBoost/Acl/acl")
 var helpers = require('handlebars-helpers')();
 var expressGit = require("express-git2");
 var db = require('./src/GitBoost/Sqllite/db');
@@ -56,10 +57,17 @@ for (var key in routes) {
 
                 res.render(path[req.route.path].render, sessionData);
             }
-            var result = path[req.route.path].action[req.method](req, res, next, _render);
-            if (result != undefined && result != null) {
-                _render(result);
-            }
+
+            acl.checkAcl(req , function()
+            {
+                var result = path[req.route.path].action[req.method](req, res, next, _render);
+                if (result != undefined && result != null) {
+                    _render(result);
+                }
+            }, function()
+            {
+                res.redirect("/login");
+            });
         });
     }
 }
