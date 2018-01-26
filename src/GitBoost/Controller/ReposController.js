@@ -134,10 +134,20 @@ function _post (req, res, next)
 
     if ( req.body.optionsRadios != "Dir" && objRet.msgError == undefined)
     {
-        //-- création d'un repos
-        
         repos.name = req.body.ReposName;
         repos.path = directoryPath;
+        
+        //-- création d'un repos
+        if ( req.body.optionsRadio2 == "Public")
+        {
+            //-- public
+
+        }
+        else
+        {
+            //-- privé
+        }
+
         git.createNonBareRepos(repos);
 
         let isBare = fs.existsSync(directoryPath + '/HEAD' );
