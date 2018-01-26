@@ -37,6 +37,7 @@ the file it's in "node_modules/gitboost" if you have a npm installation
 ```
 ```
     tempDir : "F:/tmp/",      //-- temp directory for download archive
+    onlyPrivate : true,             //-- all repo are private ( login on first page )
     theme : "bootstrap3",           //-- set your theme ( only bootstrap3 for the moment)
     defaultLogin : "admin",         //-- default login for push/pull
     defaultPassword : "admin"       //-- default password for push/pull
