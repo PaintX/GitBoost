@@ -26,8 +26,8 @@ function _get (req, res, next , render)
         case ( "view"):
         {
             objRet.graphLogs = git.getLogsForGraph(repository);
-            objRet.graphData = git.getdataForGraph(repository);
-            objRet.graphLines = git.getGraph(repository);
+            //objRet.graphData = git.getdataForGraph(repository);
+            //objRet.graphLines = git.getGraph(repository);
             res.send(JSON.stringify(objRet));
             break;
         }

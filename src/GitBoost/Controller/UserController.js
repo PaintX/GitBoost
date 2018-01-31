@@ -14,7 +14,7 @@ function _get (req, res, next , render)
         return {};
 }
 
-function _post (req, res, next)
+function _post (req, res, next, render)
 {
     let sess = req.session;
     db.userConnect(req.body.login, req.body.password, function (u)
@@ -22,7 +22,7 @@ function _post (req, res, next)
         sess.user = u;
         res.redirect('/');
     }, function (msg) {
-       
+        render({msgError : "Login ou Mot de passe incorrect !"});
     });
     //return {};
 }

@@ -6,11 +6,39 @@
 {{> header }}
 {{> breadcrumb }}
 
-<div id="gitGraphText">Repos has no commit</div>
+<style type="text/css">
+        @font-face {
+            font-family: "Atlassian Icons";
+            src: url(http://aui-cdn.atlassian.com/aui-adg/5.9.6/css/fonts/atlassian-icons.eot);
+            src: url(http://aui-cdn.atlassian.com/aui-adg/5.9.6/css/fonts/atlassian-icons.eot?#iefix) format("embedded-opentype"), url(http://aui-cdn.atlassian.com/aui-adg/5.9.6/css/fonts/atlassian-icons.woff) format("woff"), url(http://aui-cdn.atlassian.com/aui-adg/5.9.6/css/fonts/atlassian-icons.ttf) format("truetype"), url(http://aui-cdn.atlassian.com/aui-adg/5.9.6/css/fonts/atlassian-icons.svg#atlassian-icons) format("svg");
+            font-weight: normal;
+            font-style: normal;
+        }
+        #bit-booster-tbl, #bit-booster-tbl * { line-height: 1.0; font-family: monospace; border-spacing: 0; margin:0; border: 0; padding: 0; font-size: 16px;}
+        #bit-booster-tbl span.icon { font-family: "Atlassian Icons"; font-size: 16px; padding-left: 2px; }
+        #bit-booster-tbl td.d { font-style: italic; color: darkgray; padding-left: 0.7em; white-space: nowrap; }
+        #bit-booster-tbl td.commit { padding: 4px 1px; }
+</style>
 
+
+        <div width="100%" class='commits-content'>
+            <div id='download'></div>
+        </div>
+        <div id="output">
+
+        </div>
+<!--
+<div id="gitGraphText">Repos has no commit</div>
+-->
 <script>
 $( document ).ready(function() {
+    $.get( "/network?action=view&repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}",function(data){
+        dg(JSON.parse(data).graphLogs);
+    });
 
+
+
+/*
     $.get( "/network?action=view&repo={{ repo }}{{#if branch}}&branch={{branch}}{{/if}}",function(data){
         let graphLines = JSON.parse(data).graphLines;
         let lines = "";
@@ -21,7 +49,7 @@ $( document ).ready(function() {
         if ( lines.length != 0)
             $("#gitGraphText").html(lines);
     });
-
+*/
 });
 </script>
 

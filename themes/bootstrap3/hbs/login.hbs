@@ -1,7 +1,13 @@
 ﻿{{> html_header}}
 {{> navigation }}
 <div class="container">
-<br /><br /><br />
+<br />
+    {{#if msgError}}   
+        <div class="alert alert-danger">
+            <strong>Oops! </strong> {{ msgError }}
+        </div>
+    {{/if}}
+    <br /><br />
 <div class="row">
     <div class="col-sm-4"></div>
     <div class="col-sm-5 login-box">

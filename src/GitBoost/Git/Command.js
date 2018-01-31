@@ -336,7 +336,7 @@ gitExec = function(cmd, timeout, callback, callbackIteration) {
     },
     getLogsForGraph : function()
     {
-      return gitExecSync('log --all --date-order --pretty="%h|%p|%d"');
+      return gitExecSync('log --all --pretty="%h|%p|%d|%s"');
     },
     createBareReposSync : function(name)
     {

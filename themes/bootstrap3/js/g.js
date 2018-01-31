@@ -332,10 +332,8 @@ function a() {
         }
         return [o(n), o(a)]
     }
-    function g(y) 
-    {
-        function A(t) 
-        {
+    function g(y) {
+        function A(t) {
             if (t.branches && t.branches.length > 0)
                 for (var r = 0; r < t.branches.length; r++) {
                     var e = t.branches[r];
@@ -345,22 +343,20 @@ function a() {
             return !1
         }
         var i = t.commitsList
-        var b = y.trim().split("\n");
+          , b = y.trim().split("\n");
         n();
-        for (var r = 0; r < b.length; r++) 
-        {
+        for (var r = 0; r < b.length; r++) {
             var l = b[r];
-            if ("" !== l.trim()) 
-            {
+            if ("" !== l.trim()) {
                 l = l.split("|");
                 var d = l[0]
-                var C = l[1] && "" !== l[1].trim()
-                var w = document.getElementById("bit-booster-tbl")
-                var m = w.insertRow()
-                var u = m.insertCell(-1);
+                  , C = l[1] && "" !== l[1].trim()
+                  , w = document.getElementById("bit-booster-tbl")
+                  , m = w.insertRow()
+                  , u = m.insertCell(-1);
                 m.id = "T_" + d,
                 m.setAttribute("data-commitid", d),
-                u.setAttribute("class", "commit"),
+                u.setAttribute("class", "commit");
                 u.textContent = d;
                 var o = {
                     isDone: !1,
@@ -377,8 +373,8 @@ function a() {
                 l[2] && "" !== l[2].trim()) {
                     var g = h(l[2].trim());
                     o.tags = g[0],
-                    o.branches = g[1]
-                }
+                    o.branches = g[1];
+                };
             }
         }
         for (r = 0; r < i.length; r++)
